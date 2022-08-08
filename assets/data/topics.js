@@ -3,7 +3,7 @@ export default [{
     title: "Variable",
     icon: "https://clipground.com/images/parentheses-clipart-6.jpg",
     level: 1,
-    progress: 0,
+    progress: 1.5,
 
 }, {
     id: "2",

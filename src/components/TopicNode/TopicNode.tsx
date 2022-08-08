@@ -1,7 +1,9 @@
-import { View, Text, Image, StyleSheet } from 'react-native'
+import { View, Text, Image, StyleSheet, useWindowDimensions } from 'react-native'
 import React from 'react'
 import Colors from '../../constants/Colors'
 import { Topic } from '../../type/models'
+import Svg, { Circle } from 'react-native-svg';
+import CircularProgress from '../CircularProgress/CircularProgess';
 
 
 interface TopicNodeProps {
@@ -10,13 +12,24 @@ interface TopicNodeProps {
 }
 
 
-const TopicNode = ({ topic, isDisabled = true }: TopicNodeProps) => {
-  return (
-    <View style={styles.container}>
-      <View style={styles.progress}>
 
+
+const TopicNode = ({ topic, isDisabled = true }: TopicNodeProps) => {
+  const {width} = useWindowDimensions();
+  const itemWidth = width/3 -30;
+  return (
+    <View style={[styles.container,{width:itemWidth}]}>
+      <View style={styles.progress}>
+       { <CircularProgress size={itemWidth} 
+        strokeWidth={7}
+         progress={topic.progress}
+
+        />  }
         <View style={[styles.circle,
-        { backgroundColor: isDisabled ? Colors.light.darkL : Colors.light.primary },
+        { 
+          width:itemWidth-20,
+         
+           backgroundColor: isDisabled ? Colors.light.darkL : Colors.light.primary },
         ]}
 
         >
@@ -26,38 +39,40 @@ const TopicNode = ({ topic, isDisabled = true }: TopicNodeProps) => {
             }}
             style={styles.image} />
         </View>
+        
       </View>
       <Text style={styles.title}>{topic.title}</Text>
+
     </View>
   )
 }
 const styles = StyleSheet.create({
 
-
-  progress:{
-    backgroundColor:Colors.light.darkL,
-    padding:10,
-    borderRadius:999
-
-  },
-
   container: {
 
-
+   
     alignItems: 'center',
     margin: 10,
-    width: '30%',
-    maxWidth: 150
+   
+    maxWidth: 150,
+   
   },
+
+  progress: {
+    
+  
+    width:'100%',
+    justifyContent:'center',
+    aspectRatio:1,
+  },
+
   circle: {
-    width: '100%',
-    aspectRatio: 1,
-    backgroundColor: Colors.light.tertiary,
+ 
+    aspectRatio: 1,  
     borderRadius: 999,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth:3,
-    borderColor:Colors.light.background
+    alignSelf:'center'
 
   },
   image: {
