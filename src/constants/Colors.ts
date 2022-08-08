@@ -9,6 +9,7 @@ export default {
     darkL:'#617070',
     background: '#F5FBEF',
     text: '#000',
+    white:'#fff',
     tint: tintColorLight,
     tabIconDefault: '#ccc',
     tabIconSelected: tintColorLight,

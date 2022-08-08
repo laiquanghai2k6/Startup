@@ -15,8 +15,9 @@ import useColorScheme from '../hooks/useColorScheme';
 import NotFoundScreen from '../../src/screens/NotFoundScreen';
 import ModuleScreen from '../../src/screens/ModuleScreen';
 import ProfileScreen from '../../src/screens/ProfileScreen';
-import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../../types';
+import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../type/navigation';
 import LinkingConfiguration from './LinkingConfiguration';
+import TopicScreen from '../screens/TopicScreen/TopicScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -37,8 +38,20 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
-      <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
+      <Stack.Screen 
+      name="Root"
+       component={BottomTabNavigator}
+       options={{ headerShown: false }} 
+       />
+       <Stack.Screen 
+        name="Topic"
+        component={TopicScreen}
+       />
+      <Stack.Screen 
+      name="NotFound" 
+      component={NotFoundScreen}
+       options={{ title: 'Oops!' }} 
+       />
      
     </Stack.Navigator>
   );
