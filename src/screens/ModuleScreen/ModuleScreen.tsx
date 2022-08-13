@@ -7,7 +7,7 @@ import { getCurrentActiveLevel, groupByLevel } from '../../utils/topics'
 
 const levels = groupByLevel(topics);
 const currentLevel = getCurrentActiveLevel(levels)
-console.log(currentLevel)
+
 
 const ModuleScreen = () => {
   return (

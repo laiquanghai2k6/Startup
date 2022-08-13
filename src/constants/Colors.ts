@@ -8,11 +8,13 @@ export default {
     tertiary:'#9069A3',
     darkL:'#617070',
     background: '#F5FBEF',
+    backgroundError:'#fbefef',
     text: '#000',
     white:'#fff',
     tint: tintColorLight,
     tabIconDefault: '#ccc',
     tabIconSelected: tintColorLight,
+    yellow:'#ffff00'
   },
   dark: {
     primary:'#40F99B',

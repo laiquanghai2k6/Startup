@@ -12,7 +12,7 @@ interface ResourceListItemProps {
 }
 
 
-const ResourceListItem = ({ resource, index }: ResourceListItemProps) => {
+const ResourceListItem = ({ resource, index ,isLast}: ResourceListItemProps) => {
   const onPress = ()=>{
     WebBrowser.openBrowserAsync(resource.url);
   }
@@ -37,18 +37,20 @@ const ResourceListItem = ({ resource, index }: ResourceListItemProps) => {
         color="black"
         style={styles.icon}
       />
-
-<View style={[styles.lineIndicator,
-  
-  {backgroundColor: resource.completed ? Colors.light.primary : Colors.light.darkL}]}/>
-    </Pressable>
-  )
-}
+  {!isLast && (
+    <View style={[styles.lineIndicator,
+      
+      {backgroundColor: resource.completed ? Colors.light.primary : Colors.light.darkL}]}/>
+      )}
+      </Pressable>
+      )
+      
+    }
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    marginVertical: 5,
+    marginBottom: 20,
     alignItems: 'center'
   },
   completed:{
@@ -71,7 +73,7 @@ const styles = StyleSheet.create({
   },
   lineIndicator:{
     position:'absolute',
-    height:'40%',
+    height:'70%',
     width:2,
     left:15,
     top:30,

@@ -18,6 +18,7 @@ import ProfileScreen from '../../src/screens/ProfileScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../type/navigation';
 import LinkingConfiguration from './LinkingConfiguration';
 import TopicScreen from '../screens/TopicScreen/TopicScreen';
+import QuizScreen from '../screens/QuizScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -46,6 +47,10 @@ function RootNavigator() {
        <Stack.Screen 
         name="Topic"
         component={TopicScreen}
+       />
+         <Stack.Screen 
+        name="Quiz"
+        component={QuizScreen}
        />
       <Stack.Screen 
       name="NotFound" 
