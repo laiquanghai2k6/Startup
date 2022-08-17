@@ -3,7 +3,7 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import { FontAwesome5 ,AntDesign } from '@expo/vector-icons';
+import { FontAwesome5, AntDesign } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -19,6 +19,7 @@ import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../typ
 import LinkingConfiguration from './LinkingConfiguration';
 import TopicScreen from '../screens/TopicScreen/TopicScreen';
 import QuizScreen from '../screens/QuizScreen';
+import QuizEndScreen from '../screens/QuizEndScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -39,25 +40,30 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <Stack.Navigator>
-      <Stack.Screen 
-      name="Root"
-       component={BottomTabNavigator}
-       options={{ headerShown: false }} 
-       />
-       <Stack.Screen 
+      <Stack.Screen
+        name="Root"
+        component={BottomTabNavigator}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
         name="Topic"
         component={TopicScreen}
-       />
-         <Stack.Screen 
+      />
+      <Stack.Screen
         name="Quiz"
         component={QuizScreen}
-       />
-      <Stack.Screen 
-      name="NotFound" 
-      component={NotFoundScreen}
-       options={{ title: 'Oops!' }} 
-       />
-     
+      />
+      <Stack.Screen
+        name="QuizEndScreen"
+        component={QuizEndScreen}
+        options={{headerShown:false}}
+      />
+      <Stack.Screen
+        name="NotFound"
+        component={NotFoundScreen}
+        options={{ title: 'Oops!' }}
+      />
+
     </Stack.Navigator>
   );
 }
@@ -75,15 +81,17 @@ function BottomTabNavigator() {
     <BottomTab.Navigator
       initialRouteName="Module"
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme].tint,
+        tabBarActiveTintColor: Colors.light.tint,
+
       }}>
       <BottomTab.Screen
         name="Module"
         component={ModuleScreen}
-        options={{ 
+        options={{
           title: 'JS 101',
-          tabBarIcon: ({ color }) =>( <AntDesign name="book" size={24} color={color} />
           
+          tabBarIcon: ({ color }) => (<AntDesign name="book" size={24} color={color} />
+
           ),
         }}
       />
@@ -92,7 +100,7 @@ function BottomTabNavigator() {
         component={ProfileScreen}
         options={{
           title: 'Profile',
-          tabBarIcon: ({ color }) => <FontAwesome5 name="user-alt" size={24} color="black" />,
+          tabBarIcon: ({ color }) => <FontAwesome5 name="user-alt" size={24} color={color} />,
         }}
       />
     </BottomTab.Navigator>

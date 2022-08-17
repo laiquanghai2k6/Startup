@@ -1,0 +1,10 @@
+{
+  "resourceName": "s3startupstorage80414412",
+  "bucketName": "startup-storage-80414412",
+  "policyUUID": "c006441c",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "READ"
+  ]
+}

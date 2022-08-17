@@ -9,6 +9,7 @@ export default {
     darkL:'#617070',
     background: '#F5FBEF',
     backgroundError:'#fbefef',
+    blue:'#4D6AFF',
     text: '#000',
     white:'#fff',
     tint: tintColorLight,

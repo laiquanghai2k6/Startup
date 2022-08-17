@@ -8,12 +8,13 @@ import topics from '../../../assets/data/topics'
 import Markdown from 'react-native-markdown-display';
 import TopicSection from './TopicSection'
 import CustomButton from '../../components/CustomButton'
+import useApplyHeaderWorkaround from '../../hooks/useApplyHeaderWorkaround'
 
 const TopicScreen = ({ route, navigation }: RootStackScreenProps<'Topic'>) => {
 
   const topicId = route.params.id;
   const topic = topics.find((t) => t.id === topicId)
-
+  useApplyHeaderWorkaround(navigation.setOptions)
  
   useEffect(()=>{
     if (topic) {
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.light.white,
   
     padding: 10,
-    minHeight:'100%'
+    flexGrow:1
 
   },
   title: {

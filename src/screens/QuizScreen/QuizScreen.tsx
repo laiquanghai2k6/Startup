@@ -6,21 +6,31 @@ import Markdown from 'react-native-markdown-display';
 import MultipleChoiceAnswer from '../../components/MultipleChoiceAnswer/MultipleChoiceAnswer';
 import CustomBotton from '../../components/CustomButton/CustomBotton';
 import ProgressBar from '../../components/ProgressBar';
+import { RootStackScreenProps } from '../../type/navigation';
+import Animated,{ SlideInDown } from 'react-native-reanimated';
+import useApplyHeaderWorkaround from '../../hooks/useApplyHeaderWorkaround';
 
 const question = quiz[0];
 
-const QuizScreen = () => {
+const QuizScreen = ({navigation}: RootStackScreenProps<"Quiz">) => {
   const [questionIndex,setQuestionIndex] = useState(0)
   const [question, setQuestion] = useState(quiz[questionIndex]);
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
   const [answeredCorrectly,setAnsweredCorrectly] = useState<
   boolean | undefined>(undefined);
   const[numberOfCorrectAnswers,setNumberOfCorrectAnswers] = useState(0);
-  
+  useApplyHeaderWorkaround(navigation.setOptions)
+
   useEffect(() => {
-    if(questionIndex === quiz.length){
+    if(questionIndex === quiz.length) {
+      navigation.navigate("QuizEndScreen",{
+        nofQuestions:quiz.length,
+        nofCorrectAnswer:numberOfCorrectAnswers,
+      });
+
       Alert.alert("Quiz finished",
-      `You answered correctly ${numberOfCorrectAnswers} out of ${quiz.length} questions`);
+      `You answered correctly ${numberOfCorrectAnswers} out of ${quiz.length} questions`
+      );
       return;
     }
 
@@ -96,19 +106,26 @@ const QuizScreen = () => {
 
 
       </ScrollView>
-      {answeredCorrectly === true && <View style={[styles.answerBox,styles.correctAnswerBox]}>
+      {answeredCorrectly === true && 
+      <Animated.View 
+      entering={SlideInDown.duration(500)}
+      exiting={SlideInDown.duration(500)}
+      style={[styles.answerBox,styles.correctAnswerBox]}>
           <Text style={styles.correctTitle}>Correct</Text>
         <CustomBotton text="Continue"       
           onPress={onContinue}         
           />
-      </View>}
+      </Animated.View>}
 
-      {answeredCorrectly === false &&<View style={[styles.answerBox,styles.wrongAnswerBox]}>
+      {answeredCorrectly === false &&<Animated.View 
+      entering={SlideInDown.duration(500)}
+      exiting={SlideInDown.duration(500)}
+      style={[styles.answerBox,styles.wrongAnswerBox]}>
           <Text style={styles.wrongTitle}>Wrong</Text>
         <CustomBotton text="Continue"         
           onPress={onContinue}          
           />
-      </View>}
+      </Animated.View>}
 
     </>
   )

@@ -19,6 +19,7 @@ export type RootStackParamList = {
   NotFound: undefined;
   Topic: {id: string};
   Quiz: {id: string};
+  QuizEndScreen: {nofQuestions:number; nofCorrectAnswer:number};
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<
