@@ -1,12 +1,12 @@
 import { View, Text, StyleSheet, Pressable } from 'react-native'
 import React from 'react'
-import { ResourceItem } from '../../type/models'
+import { Resource } from '../../models'
 import Colors from '../../constants/Colors';
 import { Entypo } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
 import { FontAwesome } from '@expo/vector-icons'; 
 interface ResourceListItemProps {
-  resource: ResourceItem;
+  resource: Resource;
   index: number;
   isLast?: boolean;
 }
@@ -14,33 +14,44 @@ interface ResourceListItemProps {
 
 const ResourceListItem = ({ resource, index ,isLast}: ResourceListItemProps) => {
   const onPress = ()=>{
+    if(resource.url){
     WebBrowser.openBrowserAsync(resource.url);
+    }
   }
   
   return (
     <Pressable onPress={onPress} style={styles.container}>
       
-      <View style={[styles.indexContainer,resource.completed?styles.completed : {}
+      <View style={[styles.indexContainer
+      ,
+      // resource.completed?styles.completed : {}
       
       ]}>
-       {resource.completed ? (
+       {/* {resource.completed ? (
        <FontAwesome name="check" size={20} color="black" />
        ) :(
          <Text>{index + 1}</Text>
         )
-       }
+       } */}
+       <Text>{index + 1}</Text>
       </View>
       <Text style={{ color: 'black' }}>{resource.title}</Text>
-      <Entypo
+      { resource.url && (<Entypo
         name="open-book"
         size={24}
         color="black"
         style={styles.icon}
       />
+      )}
   {!isLast && (
     <View style={[styles.lineIndicator,
       
-      {backgroundColor: resource.completed ? Colors.light.primary : Colors.light.darkL}]}/>
+        {
+       //   backgroundColor: resource.completed
+      //    ? Colors.light.primary : Colors.light.darkL
+          backgroundColor:Colors.light.darkL
+        
+        }]}/>
       )}
       </Pressable>
       )

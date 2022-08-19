@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, ScrollView } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect ,useState} from 'react'
 import Colors from '../../constants/Colors'
 import ResourceListItem from '../../components/ResourceListItem/ResourceListItem'
 import { useNavigation, useRoute } from '@react-navigation/native'
@@ -9,59 +9,76 @@ import Markdown from 'react-native-markdown-display';
 import TopicSection from './TopicSection'
 import CustomButton from '../../components/CustomButton'
 import useApplyHeaderWorkaround from '../../hooks/useApplyHeaderWorkaround'
-
+import { DataStore } from 'aws-amplify'
+import {Topic,Resource,Exercise} from '../../models'
 const TopicScreen = ({ route, navigation }: RootStackScreenProps<'Topic'>) => {
 
+  const[topic,setTopic] = useState<Topic>();
+  const[resources,setResources] = useState<Resource[]>([]);
+  const[exercises,setExercises] = useState<Exercise[]>([]);
+
   const topicId = route.params.id;
-  const topic = topics.find((t) => t.id === topicId)
-  useApplyHeaderWorkaround(navigation.setOptions)
- 
+
+
+  useEffect(()=>{
+    DataStore.query(Topic,topicId).then(setTopic)
+  },[topicId]);
+
   useEffect(()=>{
     if (topic) {
       navigation.setOptions({ title: topic?.title })
     }
+    DataStore.query(Resource)
+    .then(resources => resources.filter((r)=> r.topicID === topic?.id))
+    .then(setResources)
+
+    DataStore.query(Exercise)
+    .then(exercises => exercises.filter((r)=> r.topicID === topic?.id))
+    .then(setExercises)
   },[topic])
+
+  useApplyHeaderWorkaround(navigation.setOptions)
+ 
+ 
 
 
   const onStartQuiz = () =>{
     navigation.navigate("Quiz", {id:"123"})
   }
+  console.log(topic)
+ 
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-
       <TopicSection title='Intro' display={!!topic?.description}>
         <Markdown>
           {topic?.description}
-
         </Markdown>
       </TopicSection>
-      {topic?.resources && (
-        <TopicSection title='Resources' display={!!topic?.resources}>
+      
+        <TopicSection title='Resources' display={!!resources.length}>
           
-          {topic?.resources?.map((resource, index) => (
+          {resources.map((resource, index) => (
             <ResourceListItem
               key={resource.id}
               resource={resource}
               index={index}
-              isLast={index + 1 === topic.resources.length}
+              isLast={index + 1 === resources.length}
             />
 
           ))}
         </TopicSection>
-      )}
+     
 
-      <TopicSection title='Context' display={!!topic?.context}>
-        <Markdown>{topic?.context}</Markdown>
-      </TopicSection>
-      <TopicSection title='Practice' display={!!topic?.exercises}>
+   
+      <TopicSection title='Practice' display={!!exercises.length}>
 
-        {topic?.exercises?.map((resource, index) => (
+        {exercises.map((resource, index) => (
           <ResourceListItem
             key={resource.id}
             resource={resource}
             index={index}
-            isLast={index + 1 === topic.resources.length}
+            isLast={index + 1 === exercises.length}
           />
 
         ))}
