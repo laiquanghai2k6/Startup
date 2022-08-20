@@ -1,49 +1,70 @@
-import { View, Text, StyleSheet, Image, ScrollView, Alert } from 'react-native'
+import { View, Text, Image, ScrollView, Alert, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import Colors from '../../constants/Colors'
 import quiz from '../../../assets/data/quiz'
 import Markdown from 'react-native-markdown-display';
 import MultipleChoiceAnswer from '../../components/MultipleChoiceAnswer/MultipleChoiceAnswer';
 import CustomBotton from '../../components/CustomButton/CustomBotton';
 import ProgressBar from '../../components/ProgressBar';
 import { RootStackScreenProps } from '../../type/navigation';
-import Animated,{ SlideInDown } from 'react-native-reanimated';
+import Animated, { SlideInDown } from 'react-native-reanimated';
 import useApplyHeaderWorkaround from '../../hooks/useApplyHeaderWorkaround';
+import styles from './QuizScreen.style'
+import { DataStore } from 'aws-amplify';
+import { Quiz, QuizQuestion } from '../../models';
+import {S3Image} from 'aws-amplify-react-native'
 
-const question = quiz[0];
 
-const QuizScreen = ({navigation}: RootStackScreenProps<"Quiz">) => {
-  const [questionIndex,setQuestionIndex] = useState(0)
-  const [question, setQuestion] = useState(quiz[questionIndex]);
+
+const QuizScreen = ({ navigation, route }: RootStackScreenProps<"Quiz">) => {
+  const [quiz, setQuiz] = useState<Quiz | undefined>();
+  const [questionIndex, setQuestionIndex] = useState(0)
+  const [questions,setQuestions] = useState<QuizQuestion[]>([])
+  const question = questions[questionIndex]
+  // const [question, setQuestion] = useState(quiz[questionIndex]);
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
-  const [answeredCorrectly,setAnsweredCorrectly] = useState<
-  boolean | undefined>(undefined);
-  const[numberOfCorrectAnswers,setNumberOfCorrectAnswers] = useState(0);
+  const [answeredCorrectly, setAnsweredCorrectly] = useState<
+    boolean | undefined>(undefined);
+  const [numberOfCorrectAnswers, setNumberOfCorrectAnswers] = useState(0);
   useApplyHeaderWorkaround(navigation.setOptions)
 
+  const quizId = route.params.id;
+  useEffect(()=>{
+   
+    DataStore.query(Quiz,quizId).then(setQuiz).catch(console.log)
+  },[quizId]);
+
+  useEffect(()=>{
+    if(quiz){
+      DataStore.query(QuizQuestion)
+      .then((questions)=> questions.filter((q)=>q.quizID === quiz.id))
+      .then(setQuestions);
+    }
+   
+  },[quiz])
+  console.log(questions)
+
+
   useEffect(() => {
-    if(questionIndex === quiz.length) {
-      navigation.navigate("QuizEndScreen",{
-        nofQuestions:quiz.length,
-        nofCorrectAnswer:numberOfCorrectAnswers,
+    if (questionIndex === questions.length && questionIndex > 0) {
+      navigation.navigate("QuizEndScreen", {
+        nofQuestions: questions.length,
+        nofCorrectAnswer: numberOfCorrectAnswers,
       });
 
-      Alert.alert("Quiz finished",
-      `You answered correctly ${numberOfCorrectAnswers} out of ${quiz.length} questions`
-      );
+
       return;
     }
 
-    setQuestion(quiz[questionIndex]);
+    // setQuestion(quiz[questionIndex]);
     setAnsweredCorrectly(undefined);
-  },[questionIndex])
+  }, [questionIndex])
 
-  const onChoicePress = (choice) => {
+  const onChoicePress = (choice: string) => {
     setSelectedAnswers(currentSelectedAnswers => {
       if (currentSelectedAnswers.includes(choice)) {
         return currentSelectedAnswers.filter(answer => answer !== choice)
       } else {
-        if (question.correctAnswers.length > 1)
+        if (question?.correctAnswers && question.correctAnswers.length > 1)
           return [...currentSelectedAnswers, choice];
         else
           return [choice]
@@ -54,16 +75,19 @@ const QuizScreen = ({navigation}: RootStackScreenProps<"Quiz">) => {
 
 
   const onSubmit = () => {
-    if (selectedAnswers.length !== question.correctAnswers.length) {
+    if(!question){
+      return;
+    }
+    if (selectedAnswers.length !== question.correctAnswers?.length) {
       setAnsweredCorrectly(false)
       return;
     } else {
       const isCorrect = question.correctAnswers.every((answer) =>
         selectedAnswers.includes(answer)
       );
-      setAnsweredCorrectly(isCorrect); 
-      if(isCorrect){
-        setNumberOfCorrectAnswers((n)=> n + 1);
+      setAnsweredCorrectly(isCorrect);
+      if (isCorrect) {
+        setNumberOfCorrectAnswers((n) => n + 1);
       }
     }
   }
@@ -71,60 +95,68 @@ const QuizScreen = ({navigation}: RootStackScreenProps<"Quiz">) => {
   const onContinue = () => {
     setQuestionIndex((index) => index + 1)
   }
+  if(!question){
+    return <ActivityIndicator />
+  }
   return (
+
+
     <>
-    <ProgressBar progress={questionIndex/quiz.length} />
+      <ProgressBar progress={questionIndex / questions.length} />
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.question}>{question.question}</Text>
-        {!!question.image && (<Image
-          source={{ uri: question.image }}
+        {!!question.image && (<S3Image
+          imgKey={question.image}
           style={styles.questionImage}
           resizeMode={"contain"}
         />
         )}
 
         {!!question.content && <Markdown>{question.content}</Markdown>}
+        
+        {question.choices && (
         <View style={styles.choicesContainer}>
-        {question.choices?.map((choice) =>(
-          <MultipleChoiceAnswer
-            key={choice}
-            choice={choice}
-            onPress={onChoicePress}
-            isSelected={selectedAnswers.includes(choice)}
-            disabled={answeredCorrectly !== undefined}
+          {question.choices?.map((choice) => (
+            <MultipleChoiceAnswer
+              key={choice}
+              choice={choice}
+              onPress={onChoicePress}
+              isSelected={selectedAnswers.includes(choice)}
+              disabled={answeredCorrectly !== undefined}
 
-          />
-        ))}
+            />
+          ))}
+        
         </View>
+        )}
 
- 
-          <CustomBotton text="Submit"
-            disabled={isButtonDisabled}
-            onPress={onSubmit} />
-    
+        <CustomBotton text="Submit"
+          disabled={isButtonDisabled}
+          onPress={onSubmit} />
+
 
 
 
       </ScrollView>
-      {answeredCorrectly === true && 
-      <Animated.View 
-      entering={SlideInDown.duration(500)}
-      exiting={SlideInDown.duration(500)}
-      style={[styles.answerBox,styles.correctAnswerBox]}>
+      {answeredCorrectly === true &&
+        <Animated.View
+          entering={SlideInDown.duration(500)}
+          exiting={SlideInDown.duration(500)}
+          style={[styles.answerBox, styles.correctAnswerBox]}>
           <Text style={styles.correctTitle}>Correct</Text>
-        <CustomBotton text="Continue"       
-          onPress={onContinue}         
+          <CustomBotton text="Continue"
+            onPress={onContinue}
           />
-      </Animated.View>}
+        </Animated.View>}
 
-      {answeredCorrectly === false &&<Animated.View 
-      entering={SlideInDown.duration(500)}
-      exiting={SlideInDown.duration(500)}
-      style={[styles.answerBox,styles.wrongAnswerBox]}>
-          <Text style={styles.wrongTitle}>Wrong</Text>
-        <CustomBotton text="Continue"         
-          onPress={onContinue}          
-          />
+      {answeredCorrectly === false && <Animated.View
+        entering={SlideInDown.duration(500)}
+        exiting={SlideInDown.duration(500)}
+        style={[styles.answerBox, styles.wrongAnswerBox]}>
+        <Text style={styles.wrongTitle}>Wrong</Text>
+        <CustomBotton text="Continue"
+          onPress={onContinue}
+        />
       </Animated.View>}
 
     </>
@@ -132,69 +164,4 @@ const QuizScreen = ({navigation}: RootStackScreenProps<"Quiz">) => {
 }
 
 
-const styles = StyleSheet.create({
-
-
-
-  container: {
-    backgroundColor: Colors.light.white,
-    padding: 10,
-    flexGrow: 1,
-  },
-  question: {
-    fontSize: 20,
-    fontWeight: '500',
-    marginVertical: 10
-  },
-  questionImage: {
-
-    width: '100%',
-    height: 300,
-
-  },
-  choicesContainer: {
-    marginTop: 'auto'
-  },
-  answerBox: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    padding:10,
-    borderTopLeftRadius:15,
-    borderTopRightRadius:15,
-    backgroundColor: Colors.light.background,
-    width: '100%',
-    borderColor: Colors.light.primary,
-    borderWidth:1,
-    borderBottomWidth:0,
-    shadowColor:'#000',
-    shadowOffset: {
-      width: 2,
-      height:6,
-    },
-    shadowOpacity: 0.39,
-    shadowRadius: 8.3,
-    elevation: 13,
-  },
-  correctAnswerBox: {
-    borderColor:Colors.light.primary,
-    backgroundColor:Colors.light.background,
-  },
-  wrongAnswerBox: {
-    borderColor:Colors.light.secondary,
-    backgroundColor:Colors.light.backgroundError,
-  },
-  correctTitle:{
-    fontSize:16,
-    color:Colors.light.primary,
-    fontWeight: 'bold',
-    marginVertical: 10,
-  },
-  wrongTitle:{
-    fontSize:16,
-    color:Colors.light.secondary,
-    fontWeight: 'bold',
-    marginVertical: 10,
-  },
-})
 export default QuizScreen

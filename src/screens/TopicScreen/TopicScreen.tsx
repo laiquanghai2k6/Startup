@@ -43,9 +43,11 @@ const TopicScreen = ({ route, navigation }: RootStackScreenProps<'Topic'>) => {
 
 
   const onStartQuiz = () =>{
-    navigation.navigate("Quiz", {id:"123"})
+    if(topic?.topicQuizId){
+      navigation.navigate("Quiz", {id:topic.topicQuizId})
+    }
   }
-  console.log(topic)
+  // console.log(topic)
  
 
   return (
@@ -83,7 +85,10 @@ const TopicScreen = ({ route, navigation }: RootStackScreenProps<'Topic'>) => {
 
         ))}
       </TopicSection>
+
+      {topic?.topicQuizId && (
       <CustomButton text={"Start Quiz"} onPress={onStartQuiz} />
+      )}
     </ScrollView>
   )
 }

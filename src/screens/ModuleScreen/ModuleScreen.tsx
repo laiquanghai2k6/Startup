@@ -26,11 +26,7 @@ const ModuleScreen = () => {
     fetchTopics();
   
   },[])
-  console.log(levels)
-
-  // useEffect(()=>{
-  //   setCurrentLevel(getCurrentActiveLevel(levels))
-  // },[levels])
+ 
   return (
     <View style={styles.container}>
 
