@@ -24,6 +24,14 @@ type TopicMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
+type UserTopicProgressMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
+type QuizResultMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
 export declare class Exercise {
   readonly id: string;
   readonly title: string;
@@ -84,4 +92,33 @@ export declare class Topic {
   readonly topicQuizId?: string | null;
   constructor(init: ModelInit<Topic, TopicMetaData>);
   static copyOf(source: Topic, mutator: (draft: MutableModel<Topic, TopicMetaData>) => MutableModel<Topic, TopicMetaData> | void): Topic;
+}
+
+export declare class UserTopicProgress {
+  readonly id: string;
+  readonly sub: string;
+  readonly completedResourcesIDs: string[];
+  readonly completedExercisesIDs: string[];
+  readonly progress: number;
+  readonly isCompleted?: boolean | null;
+  readonly topicId: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  constructor(init: ModelInit<UserTopicProgress, UserTopicProgressMetaData>);
+  static copyOf(source: UserTopicProgress, mutator: (draft: MutableModel<UserTopicProgress, UserTopicProgressMetaData>) => MutableModel<UserTopicProgress, UserTopicProgressMetaData> | void): UserTopicProgress;
+}
+
+export declare class QuizResult {
+  readonly id: string;
+  readonly sub: string;
+  readonly nofQuestion: number;
+  readonly nofCorrectAnswer: number;
+  readonly percentage: number;
+  readonly failedQuestionIDs: string[];
+  readonly try: number;
+  readonly quizId: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  constructor(init: ModelInit<QuizResult, QuizResultMetaData>);
+  static copyOf(source: QuizResult, mutator: (draft: MutableModel<QuizResult, QuizResultMetaData>) => MutableModel<QuizResult, QuizResultMetaData> | void): QuizResult;
 }

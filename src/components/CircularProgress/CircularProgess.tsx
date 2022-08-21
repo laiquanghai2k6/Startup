@@ -20,7 +20,7 @@ const CircularProgress = (props: CircularProgressProps) => {
   return (
 
 
-    <View style={{ position: 'absolute', top: 0 }} >
+    <View style={{ position: 'absolute', top: 0, }} >
       <Svg width={size} height={size}>
         {/* Background Circle */}
         <Circle

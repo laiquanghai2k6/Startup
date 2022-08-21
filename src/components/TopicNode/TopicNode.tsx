@@ -3,13 +3,15 @@ import {
   , Pressable
 
 } from 'react-native'
-import React from 'react'
+import React, { useEffect,useState } from 'react'
 import Colors from '../../constants/Colors'
-import { Topic } from '../../type/models'
+import { Topic,UserTopicProgress } from '../../models'
 import CircularProgress from '../CircularProgress/CircularProgess';
 import { useNavigation } from '@react-navigation/native';
 import { S3Image } from 'aws-amplify-react-native';
-import { FontAwesome5 } from '@expo/vector-icons'; 
+import { FontAwesome5 } from '@expo/vector-icons';
+import { Auth, DataStore } from 'aws-amplify';
+
 
 interface TopicNodeProps {
   topic: Topic;
@@ -20,8 +22,26 @@ interface TopicNodeProps {
 
 
 const TopicNode = ({ topic, isDisabled = false }: TopicNodeProps) => {
+  const [progress,setProgress] = useState(0);
   const { width } = useWindowDimensions();
   const navigation = useNavigation();
+
+  useEffect(() => {
+      (async ()=>{
+        const userData = await Auth.currentAuthenticatedUser();
+        const userTopicProgresses = await DataStore.query(UserTopicProgress);
+
+        const userProgress = userTopicProgresses.find(
+          (tp)=> tp.topicId === topic?.id && tp.sub === userData?.attributes.sub
+        );
+        if(userProgress){
+          setProgress(userProgress?.progress || 0)
+        }
+      }
+
+      )()
+  }, [topic])
+
   const itemWidth = width / 3 - 30;
   const onPress = () => {
     navigation.navigate("Topic", { id: topic.id });
@@ -35,7 +55,7 @@ const TopicNode = ({ topic, isDisabled = false }: TopicNodeProps) => {
       <View style={styles.progress}>
         {<CircularProgress size={itemWidth}
           strokeWidth={7}
-          progress={topic.progress}
+          progress={progress}
 
         />}
         <View style={[styles.circle,
@@ -47,14 +67,14 @@ const TopicNode = ({ topic, isDisabled = false }: TopicNodeProps) => {
         ]}
 
         >
-          {topic.icon ? (  
-          <S3Image
-            imgKey={topic.icon}
-            style={styles.image} />
-            ):(
-              <FontAwesome5 name="question" size={35} color="black" />
-            )}
-        
+          {topic.icon ? (
+            <S3Image
+              imgKey={topic.icon}
+              style={styles.image} />
+          ) : (
+            <FontAwesome5 name="question" size={35} color="black" />
+          )}
+
         </View>
 
       </View>

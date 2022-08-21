@@ -9,54 +9,96 @@ import { RootStackScreenProps } from '../../type/navigation';
 import Animated, { SlideInDown } from 'react-native-reanimated';
 import useApplyHeaderWorkaround from '../../hooks/useApplyHeaderWorkaround';
 import styles from './QuizScreen.style'
-import { DataStore } from 'aws-amplify';
-import { Quiz, QuizQuestion } from '../../models';
-import {S3Image} from 'aws-amplify-react-native'
+import { Auth, DataStore } from 'aws-amplify';
+import { Quiz, QuizQuestion, QuizResult } from '../../models';
+import { S3Image } from 'aws-amplify-react-native'
+import { UserTopicProgress } from '../../models';
 
 
 
 const QuizScreen = ({ navigation, route }: RootStackScreenProps<"Quiz">) => {
   const [quiz, setQuiz] = useState<Quiz | undefined>();
   const [questionIndex, setQuestionIndex] = useState(0)
-  const [questions,setQuestions] = useState<QuizQuestion[]>([])
+  const [questions, setQuestions] = useState<QuizQuestion[]>([])
   const question = questions[questionIndex]
   // const [question, setQuestion] = useState(quiz[questionIndex]);
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
   const [answeredCorrectly, setAnsweredCorrectly] = useState<
     boolean | undefined>(undefined);
   const [numberOfCorrectAnswers, setNumberOfCorrectAnswers] = useState(0);
-  useApplyHeaderWorkaround(navigation.setOptions)
+  const [wrongAnswersIDs,setWrongAnswersIDs] = useState<string[]>([])
+
+  const [previousResult, setPreviousResult] = useState<QuizResult | undefined>()
+
 
   const quizId = route.params.id;
-  useEffect(()=>{
-   
-    DataStore.query(Quiz,quizId).then(setQuiz).catch(console.log)
-  },[quizId]);
+  useEffect(() => {
+
+    DataStore.query(Quiz, quizId).then(setQuiz).catch(console.log)
+  }, [quizId]);
 
   useEffect(()=>{
-    if(quiz){
-      DataStore.query(QuizQuestion)
-      .then((questions)=> questions.filter((q)=>q.quizID === quiz.id))
-      .then(setQuestions);
+    if(answeredCorrectly === false && !wrongAnswersIDs.includes(question.id)){
+      setWrongAnswersIDs([...wrongAnswersIDs,question.id])
     }
-   
-  },[quiz])
-  console.log(questions)
-
+  },[answeredCorrectly])
 
   useEffect(() => {
-    if (questionIndex === questions.length && questionIndex > 0) {
-      navigation.navigate("QuizEndScreen", {
-        nofQuestions: questions.length,
-        nofCorrectAnswer: numberOfCorrectAnswers,
-      });
+    if (quiz) {
+
+      (async () => {
+        const questions = await DataStore.query(QuizQuestion);
+        setQuestions(questions.filter((q) => q.quizID === quiz.id));
+
+        //get previous result
+        const userData = await Auth.currentAuthenticatedUser();
+        const quizResults = await DataStore.query(QuizResult);
+        const myQuizResult = quizResults.filter(
+          (qr) => qr.quizId === quiz.id && qr.sub === userData?.attributes.sub
+        );
+      const previousResult = myQuizResult.reduce(
+        (acc:undefined | QuizResult,curr)=> !acc || curr.try > acc.try ? curr : acc,
+        undefined
+      )
+        console.log(previousResult)
+        setPreviousResult(previousResult);
+      })()
 
 
-      return;
     }
 
-    // setQuestion(quiz[questionIndex]);
-    setAnsweredCorrectly(undefined);
+  }, [quiz])
+
+  useApplyHeaderWorkaround(navigation.setOptions)
+
+
+  useEffect( () => {
+    (async ()=>{
+      if (questionIndex === questions.length && questionIndex > 0) {
+        const userData = await Auth.currentAuthenticatedUser();
+        if (quiz && userData) {
+          DataStore.save(new QuizResult({
+            sub: userData?.attributes.sub,
+            nofQuestion: questions.length,
+            nofCorrectAnswer: numberOfCorrectAnswers,
+            percentage: numberOfCorrectAnswers / questions.length,
+            failedQuestionIDs:  wrongAnswersIDs,
+            try: previousResult ? previousResult.try + 1 : 1,
+            quizId: quiz.id
+          }))
+          navigation.navigate("QuizEndScreen", {
+            nofQuestions: questions.length,
+            nofCorrectAnswer: numberOfCorrectAnswers,
+          });
+  
+        }
+        return;
+      }
+  
+      // setQuestion(quiz[questionIndex]);
+      setAnsweredCorrectly(undefined);
+    })()
+    
   }, [questionIndex])
 
   const onChoicePress = (choice: string) => {
@@ -75,7 +117,7 @@ const QuizScreen = ({ navigation, route }: RootStackScreenProps<"Quiz">) => {
 
 
   const onSubmit = () => {
-    if(!question){
+    if (!question) {
       return;
     }
     if (selectedAnswers.length !== question.correctAnswers?.length) {
@@ -95,7 +137,7 @@ const QuizScreen = ({ navigation, route }: RootStackScreenProps<"Quiz">) => {
   const onContinue = () => {
     setQuestionIndex((index) => index + 1)
   }
-  if(!question){
+  if (!question) {
     return <ActivityIndicator />
   }
   return (
@@ -113,21 +155,21 @@ const QuizScreen = ({ navigation, route }: RootStackScreenProps<"Quiz">) => {
         )}
 
         {!!question.content && <Markdown>{question.content}</Markdown>}
-        
-        {question.choices && (
-        <View style={styles.choicesContainer}>
-          {question.choices?.map((choice) => (
-            <MultipleChoiceAnswer
-              key={choice}
-              choice={choice}
-              onPress={onChoicePress}
-              isSelected={selectedAnswers.includes(choice)}
-              disabled={answeredCorrectly !== undefined}
 
-            />
-          ))}
-        
-        </View>
+        {question.choices && (
+          <View style={styles.choicesContainer}>
+            {question.choices?.map((choice) => (
+              <MultipleChoiceAnswer
+                key={choice}
+                choice={choice}
+                onPress={onChoicePress}
+                isSelected={selectedAnswers.includes(choice)}
+                disabled={answeredCorrectly !== undefined}
+
+              />
+            ))}
+
+          </View>
         )}
 
         <CustomBotton text="Submit"

@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Pressable } from 'react-native'
 import React from 'react'
-import { Resource } from '../../models'
+import { Exercise, Resource } from '../../models'
 import Colors from '../../constants/Colors';
 import { Entypo } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
@@ -9,14 +9,25 @@ interface ResourceListItemProps {
   resource: Resource;
   index: number;
   isLast?: boolean;
+  isCompleted?: boolean;
+  onComplete?: (resource: Resource | Exercise) => void;
 }
 
 
-const ResourceListItem = ({ resource, index ,isLast}: ResourceListItemProps) => {
+const ResourceListItem = ({ 
+  resource, 
+  index ,
+  isLast,
+  isCompleted = false,
+  onComplete = () => {
+
+  }
+}: ResourceListItemProps) => {
   const onPress = ()=>{
-    if(resource.url){
-    WebBrowser.openBrowserAsync(resource.url);
-    }
+    // if(resource.url){
+    // WebBrowser.openBrowserAsync(resource.url);
+    // }
+    onComplete(resource)
   }
   
   return (
@@ -24,16 +35,16 @@ const ResourceListItem = ({ resource, index ,isLast}: ResourceListItemProps) => 
       
       <View style={[styles.indexContainer
       ,
-      // resource.completed?styles.completed : {}
+      isCompleted?styles.completed : {}
       
       ]}>
-       {/* {resource.completed ? (
+       {isCompleted ? (
        <FontAwesome name="check" size={20} color="black" />
        ) :(
          <Text>{index + 1}</Text>
         )
-       } */}
-       <Text>{index + 1}</Text>
+       }
+       
       </View>
       <Text style={{ color: 'black' }}>{resource.title}</Text>
       { resource.url && (<Entypo
@@ -47,9 +58,9 @@ const ResourceListItem = ({ resource, index ,isLast}: ResourceListItemProps) => 
     <View style={[styles.lineIndicator,
       
         {
-       //   backgroundColor: resource.completed
-      //    ? Colors.light.primary : Colors.light.darkL
-          backgroundColor:Colors.light.darkL
+         backgroundColor: isCompleted
+         ? Colors.light.primary : Colors.light.darkL
+          // backgroundColor:Colors.light.darkL
         
         }]}/>
       )}
