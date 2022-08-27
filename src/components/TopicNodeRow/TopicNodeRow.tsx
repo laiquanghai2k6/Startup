@@ -2,7 +2,7 @@ import { View, Text } from 'react-native'
 import React from 'react'
 
 
-const TopidNodeRow:React.FC = ({children}) => {
+const TopicNodeRow = ({children}: {children:React.ReactNode}) => {
   return (
     <View style={{flexDirection:'row', width:'100%',
     justifyContent:'center'
@@ -13,4 +13,4 @@ const TopidNodeRow:React.FC = ({children}) => {
   )
 }
 
-export default TopidNodeRow
+export default TopicNodeRow

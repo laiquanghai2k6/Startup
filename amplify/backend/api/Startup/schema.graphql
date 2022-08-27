@@ -58,4 +58,4 @@ type QuizResult @model @auth(rules: [{allow: public}]) {
   failedQuestionIDs: [ID!]!
   try: Int!
   quizId: ID!
-}  
+} 

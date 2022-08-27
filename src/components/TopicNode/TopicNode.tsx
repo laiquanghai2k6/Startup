@@ -3,18 +3,20 @@ import {
   , Pressable
 
 } from 'react-native'
-import React, { useEffect,useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Colors from '../../constants/Colors'
-import { Topic,UserTopicProgress } from '../../models'
+import { Topic, UserTopicProgress } from '../../models'
 import CircularProgress from '../CircularProgress/CircularProgess';
 import { useNavigation } from '@react-navigation/native';
 import { S3Image } from 'aws-amplify-react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Auth, DataStore } from 'aws-amplify';
-
+import { TopicWithResult } from '../../type/models';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { set } from 'react-native-reanimated';
 
 interface TopicNodeProps {
-  topic: Topic;
+  topic: TopicWithResult;
   isDisabled?: boolean;
 }
 
@@ -22,30 +24,53 @@ interface TopicNodeProps {
 
 
 const TopicNode = ({ topic, isDisabled = false }: TopicNodeProps) => {
-  const [progress,setProgress] = useState(0);
+  const [masteryPoint, setMasteryPoint] = useState("");
+  const [progress, setProgress] = useState(0);
   const { width } = useWindowDimensions();
   const navigation = useNavigation();
 
   useEffect(() => {
-      (async ()=>{
-        const userData = await Auth.currentAuthenticatedUser();
-        const userTopicProgresses = await DataStore.query(UserTopicProgress);
+    (async () => {
+      const userData = await Auth.currentAuthenticatedUser();
+      const userTopicProgresses = await DataStore.query(UserTopicProgress);
 
-        const userProgress = userTopicProgresses.find(
-          (tp)=> tp.topicId === topic?.id && tp.sub === userData?.attributes.sub
-        );
-        if(userProgress){
-          setProgress(userProgress?.progress || 0)
-        }
+      const userProgress = userTopicProgresses.find(
+        (tp) => tp.topicId === topic?.id && tp.sub === userData?.attributes.sub
+      );
+      if (userProgress) {
+        setProgress(userProgress?.progress || 0)
       }
+    }
 
-      )()
+    )()
   }, [topic])
 
   const itemWidth = width / 3 - 30;
   const onPress = () => {
     navigation.navigate("Topic", { id: topic.id });
   }
+
+  useEffect(() => {
+    if (topic.quizResult && topic.quizResult?.percentage >= 0.9) {
+      setMasteryPoint("https://loltracker.com/images/easyblog_shared/articles_philidia/CyclePBE516/b2ap3_thumbnail_20150818Mastery7.png")
+    } else if (topic.quizResult && topic.quizResult?.percentage < 0.9 && topic.quizResult?.percentage >= 0.7) {
+      setMasteryPoint("https://loltracker.com/images/easyblog_shared/articles_philidia/CyclePBE516/b2ap3_thumbnail_20150818Mastery6.png")
+    }
+    else if (topic.quizResult && topic.quizResult?.percentage < 0.7 && topic.quizResult?.percentage >= 0.5) {
+      setMasteryPoint("https://vignette.wikia.nocookie.net/leagueoflegends/images/9/96/Champion_Mastery_Level_5_Flair.png/revision/latest?cb=20150312005344")
+    } else if (topic.quizResult && topic.quizResult?.percentage < 0.5 && topic.quizResult?.percentage >= 0.4) {
+      setMasteryPoint("https://vignette.wikia.nocookie.net/leagueoflegends/images/b/b6/Champion_Mastery_Level_4_Flair.png/revision/latest?cb=20150312005332")
+    } else if (topic.quizResult && topic.quizResult?.percentage < 0.4 && topic.quizResult?.percentage >= 0.3) {
+      setMasteryPoint("https://scontent.fhph1-2.fna.fbcdn.net/v/t1.15752-9/300779622_466629465358735_4503815875965780700_n.png?_nc_cat=106&ccb=1-7&_nc_sid=ae9488&_nc_ohc=i4HouJf7GYcAX-e349_&_nc_ht=scontent.fhph1-2.fna&oh=03_AVKv8XADzOpm2sKJ8zJqOw9F_NK_Ob9b1HTVOs5n8t62jg&oe=63303F40")
+    } else{
+      setMasteryPoint("https://vignette.wikia.nocookie.net/leagueoflegends/images/4/4d/Champion_Mastery_Level_2_Flair.png/revision/latest?cb=20150312005244")
+    }
+    
+  }, [topic.quizResult])
+  
+
+
+
 
 
   return (
@@ -74,6 +99,28 @@ const TopicNode = ({ topic, isDisabled = false }: TopicNodeProps) => {
           ) : (
             <FontAwesome5 name="question" size={35} color="black" />
           )}
+
+          <View
+            style={[styles.percentageBox,  
+              {backgroundColor : topic.isQuizPassed 
+              ? Colors.light.primary
+              : Colors.light.tabIconDefault
+            }
+          ]}
+          >
+            <Image
+
+              style={styles.mastery
+            
+              }
+              source={
+                {
+                  uri: (masteryPoint)
+                }}
+                
+                />
+
+          </View>
 
         </View>
 
@@ -109,7 +156,8 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     alignItems: 'center',
     justifyContent: 'center',
-    alignSelf: 'center'
+    alignSelf: 'center',
+
 
   },
   image: {
@@ -124,6 +172,24 @@ const styles = StyleSheet.create({
     textAlign: 'center'
 
   },
+  percentageBox: {
+    position: "absolute",
+    backgroundColor: Colors.light.primary,
+    borderColor: Colors.light.white,
+    borderWidth: 2,
+    bottom: -10,
+    right: -10,
+
+    paddingHorizontal: 3,
+    paddingVertical: 1,
+    borderRadius: 20,
+
+  },
+  mastery: {
+    height: 25,
+    width: 25,
+  }
+
 })
 
 export default TopicNode

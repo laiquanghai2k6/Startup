@@ -24,7 +24,9 @@ const TopicScreen = ({ route, navigation }: RootStackScreenProps<'Topic'>) => {
 
   useEffect(() => {
     DataStore.query(Topic, topicId).then(setTopic)
+    
   }, [topicId]);
+    // console.log(topic)
 
   useEffect(() => {
     if (topic) {

@@ -3,10 +3,8 @@ export default [{
     title: "Variable",
     icon: "https://clipground.com/images/parentheses-clipart-6.jpg",
     level: 1,
-    progress: 1,
+    progress: 0.2,
     description:`
-
-
 **This is some bold text!**   
 This is normal text. Declare \`const a = 123\`
 \`\`\`

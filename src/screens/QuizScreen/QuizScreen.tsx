@@ -60,7 +60,7 @@ const QuizScreen = ({ navigation, route }: RootStackScreenProps<"Quiz">) => {
         (acc:undefined | QuizResult,curr)=> !acc || curr.try > acc.try ? curr : acc,
         undefined
       )
-        console.log(previousResult)
+        // console.log(previousResult)
         setPreviousResult(previousResult);
       })()
 
@@ -68,6 +68,7 @@ const QuizScreen = ({ navigation, route }: RootStackScreenProps<"Quiz">) => {
     }
 
   }, [quiz])
+    // console.log(questions)
 
   useApplyHeaderWorkaround(navigation.setOptions)
 

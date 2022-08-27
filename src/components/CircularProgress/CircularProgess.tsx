@@ -24,7 +24,7 @@ const CircularProgress = (props: CircularProgressProps) => {
       <Svg width={size} height={size}>
         {/* Background Circle */}
         <Circle
-          stroke={Colors.light.background}
+          stroke={Colors.light.tabIconDefault}
           fill="none"
           cx={size / 2}
           cy={size / 2}
