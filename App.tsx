@@ -11,7 +11,7 @@ import {withAuthenticator,AmplifyTheme} from 'aws-amplify-react-native'
 import Colors from './src/constants/Colors';
 import ModuleContextProvider from './src/contexts/ModuleContext'
 
-Amplify.configure({...awsconfig,Analytics:{disabled:true}});
+Amplify.configure({...awsconfig});
 
 function App() {
   const isLoadingComplete = useCachedResources();

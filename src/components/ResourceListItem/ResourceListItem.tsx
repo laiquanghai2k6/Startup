@@ -5,6 +5,7 @@ import Colors from '../../constants/Colors';
 import { Entypo } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
 import { FontAwesome } from '@expo/vector-icons'; 
+import { Analytics } from 'aws-amplify';
 interface ResourceListItemProps {
   resource: Resource;
   index: number;
@@ -27,7 +28,14 @@ const ResourceListItem = ({
     // if(resource.url){
     // WebBrowser.openBrowserAsync(resource.url);
     // }
-    onComplete(resource)
+    onComplete(resource);
+    if(resource instanceof Exercise){
+      Analytics.record({
+        name: resource instanceof Exercise ? 'exerciseOpened' : 'resourceOpened',
+        attributes:{id : resource.id}
+
+      })
+    }
   }
   
   return (

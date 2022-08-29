@@ -9,7 +9,7 @@ import { RootStackScreenProps } from '../../type/navigation';
 import Animated, { SlideInDown } from 'react-native-reanimated';
 import useApplyHeaderWorkaround from '../../hooks/useApplyHeaderWorkaround';
 import styles from './QuizScreen.style'
-import { Auth, DataStore } from 'aws-amplify';
+import { Analytics, Auth, DataStore } from 'aws-amplify';
 import { Quiz, QuizQuestion, QuizResult } from '../../models';
 import { S3Image } from 'aws-amplify-react-native'
 import { UserTopicProgress } from '../../models';
@@ -32,6 +32,15 @@ const QuizScreen = ({ navigation, route }: RootStackScreenProps<"Quiz">) => {
 
 
   const quizId = route.params.id;
+  useEffect(()=>{
+    if(quizId){
+      Analytics.record({
+        name:'quizOpened',
+        attributes:{id:quizId},
+      })
+    }
+  },[quizId])
+
   useEffect(() => {
 
     DataStore.query(Quiz, quizId).then(setQuiz).catch(console.log)
@@ -78,21 +87,36 @@ const QuizScreen = ({ navigation, route }: RootStackScreenProps<"Quiz">) => {
       if (questionIndex === questions.length && questionIndex > 0) {
         const userData = await Auth.currentAuthenticatedUser();
         if (quiz && userData) {
+          const percentage = numberOfCorrectAnswers / questions.length;
+          const numberOfTries = previousResult ? previousResult.try + 1 : 1
           DataStore.save(new QuizResult({
             sub: userData?.attributes.sub,
             nofQuestion: questions.length,
             nofCorrectAnswer: numberOfCorrectAnswers,
             percentage: numberOfCorrectAnswers / questions.length,
             failedQuestionIDs:  wrongAnswersIDs,
-            try: previousResult ? previousResult.try + 1 : 1,
+            try: numberOfTries,
             quizId: quiz.id
           }))
+          Analytics.record({
+            name:'quizFinished',
+            attributes:{id: quizId,
+            },
+            metrics:{
+            percentage:numberOfCorrectAnswers / questions.length,
+            try:numberOfTries,
+            }
+          })
+        }
+      
+
+
           navigation.navigate("QuizEndScreen", {
             nofQuestions: questions.length,
             nofCorrectAnswer: numberOfCorrectAnswers,
           });
   
-        }
+        
         return;
       }
   

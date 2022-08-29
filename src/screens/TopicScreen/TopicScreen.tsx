@@ -9,7 +9,7 @@ import Markdown from 'react-native-markdown-display';
 import TopicSection from './TopicSection'
 import CustomButton from '../../components/CustomButton'
 import useApplyHeaderWorkaround from '../../hooks/useApplyHeaderWorkaround'
-import { Auth, DataStore } from 'aws-amplify'
+import { Analytics, Auth, DataStore } from 'aws-amplify'
 import { Topic, Resource, Exercise, UserTopicProgress } from '../../models'
 import { useModuleContext } from '../../contexts/ModuleContext'
 const TopicScreen = ({ route, navigation }: RootStackScreenProps<'Topic'>) => {
@@ -25,6 +25,15 @@ const TopicScreen = ({ route, navigation }: RootStackScreenProps<'Topic'>) => {
   const [loading,setLoading] = useState(false);
 
   const topicId = route.params.id;
+
+  useEffect(()=>{
+    if(topicId){
+      Analytics.record({
+        name: 'topicOpened',
+        attributes:{id:topicId}
+      })
+    }
+  },[topicId])
 
 
 
