@@ -25,25 +25,10 @@ interface TopicNodeProps {
 
 const TopicNode = ({ topic, isDisabled = false }: TopicNodeProps) => {
   const [masteryPoint, setMasteryPoint] = useState("");
-  const [progress, setProgress] = useState(0);
   const { width } = useWindowDimensions();
   const navigation = useNavigation();
 
-  useEffect(() => {
-    (async () => {
-      const userData = await Auth.currentAuthenticatedUser();
-      const userTopicProgresses = await DataStore.query(UserTopicProgress);
 
-      const userProgress = userTopicProgresses.find(
-        (tp) => tp.topicId === topic?.id && tp.sub === userData?.attributes.sub
-      );
-      if (userProgress) {
-        setProgress(userProgress?.progress || 0)
-      }
-    }
-
-    )()
-  }, [topic])
 
   const itemWidth = width / 3 - 30;
   const onPress = () => {
@@ -80,7 +65,7 @@ const TopicNode = ({ topic, isDisabled = false }: TopicNodeProps) => {
       <View style={styles.progress}>
         {<CircularProgress size={itemWidth}
           strokeWidth={7}
-          progress={progress}
+          progress={topic.progress?.progress || 0}
 
         />}
         <View style={[styles.circle,
@@ -177,8 +162,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.light.primary,
     borderColor: Colors.light.white,
     borderWidth: 2,
-    bottom: -10,
-    right: -10,
+    bottom: -30,
+    right: -30,
 
     paddingHorizontal: 3,
     paddingVertical: 1,

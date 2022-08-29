@@ -11,18 +11,25 @@ import CustomButton from '../../components/CustomButton'
 import useApplyHeaderWorkaround from '../../hooks/useApplyHeaderWorkaround'
 import { Auth, DataStore } from 'aws-amplify'
 import { Topic, Resource, Exercise, UserTopicProgress } from '../../models'
+import { useModuleContext } from '../../contexts/ModuleContext'
 const TopicScreen = ({ route, navigation }: RootStackScreenProps<'Topic'>) => {
 
+  const { updateTopicProgress} = useModuleContext()
   const [topic, setTopic] = useState<Topic>();
   const [userTopicProgress, setUserTopicProgress] =
     useState<UserTopicProgress>()
   const [resources, setResources] = useState<Resource[]>([]);
   const [exercises, setExercises] = useState<Exercise[]>([]);
+  const [completedExercisesIDs,setCompletedExercisesIDs] = useState<string[]>([]);
+  const [completedResourcesIDs,setCompletedResourcesIDs] = useState<string[]>([]);
+  const [loading,setLoading] = useState(false);
 
   const topicId = route.params.id;
 
 
+
   useEffect(() => {
+    setLoading(true)
     DataStore.query(Topic, topicId).then(setTopic)
     
   }, [topicId]);
@@ -54,6 +61,8 @@ const TopicScreen = ({ route, navigation }: RootStackScreenProps<'Topic'>) => {
       );
       if (userProgress) {
         setUserTopicProgress(userProgress);
+         setCompletedExercisesIDs(userProgress.completedExercisesIDs);
+        setCompletedResourcesIDs ( userProgress.completedResourcesIDs)
       } else {
         const newUserProgress = await DataStore.save(
           new UserTopicProgress({
@@ -64,10 +73,32 @@ const TopicScreen = ({ route, navigation }: RootStackScreenProps<'Topic'>) => {
             topicId: topic.id
 
           }))
+          setUserTopicProgress(newUserProgress)
       }
+      setLoading(false)
     }
     fetchTopicDetails()
   }, [topic])
+
+  // useEffect(()=>{
+  //   if(!userTopicProgress){
+  //     return;
+  //   }
+  //   const sub = DataStore.observeQuery(UserTopicProgress,(c)=>
+  //     c.id("eq",userTopicProgress.id)
+  //   ).subscribe(({items}) =>{
+  //     console.log("update")
+  //     console.log(items)
+  //     setUserTopicProgress(items[0]);
+  //     updateTopicProgress(topicId,items[0])
+  //   });
+  //   return () => {
+  //     sub.unsubscribe();
+  //   }
+
+  // },[userTopicProgress?.id]);
+ 
+
 
   useApplyHeaderWorkaround(navigation.setOptions)
 
@@ -83,29 +114,88 @@ const TopicScreen = ({ route, navigation }: RootStackScreenProps<'Topic'>) => {
  
  
   const onResourceComplete = async (resource: Resource) =>{
-    if(!userTopicProgress){return}
-    const updated = await DataStore.save(UserTopicProgress.copyOf(userTopicProgress,(updated)=>{
-      if(!updated.completedResourcesIDs.includes(resource.id)){
-      updated.completedResourcesIDs.push(resource.id);
-       const progress = (userTopicProgress.completedResourcesIDs.length + userTopicProgress.completedExercisesIDs.length + 1)
-      / (resources.length + exercises.length )
-      updated.progress = progress;
-      }
-    }));
-    setUserTopicProgress(updated)
+    if(
+      loading ||
+      !userTopicProgress ||
+       completedResourcesIDs.includes(resource.id)){
+      return}
+    // setLoading(true)
+    
+      // const updated = await DataStore.save(UserTopicProgress.copyOf(userTopicProgress,(updated)=>{
+      //   updated.completedResourcesIDs = ids;
+ 
+      //   updated.progress = getNextProgress();
+        
+      // }));
+      setCompletedResourcesIDs((existing) => 
+        existing.includes(resource.id) ? existing : [...existing,resource.id]
+      )
+    // setUserTopicProgress(updated)
+    // updateTopicProgress(topicId,updated)
+    
+    // setLoading(false)
+
   }
+useEffect(()=>{
+  if(!userTopicProgress ||
+    completedResourcesIDs.length ===
+    userTopicProgress?.completedResourcesIDs.length
+    
+    ){
+      return
+    }
+    (async () => {
+      setLoading(true);
+      const updated = await DataStore.save(UserTopicProgress.copyOf(userTopicProgress,(updated)=>{
+        updated.completedResourcesIDs = completedResourcesIDs;
+ 
+        updated.progress = getNextProgress();
+        
+      })
+      );
+
+      setUserTopicProgress(updated)
+      updateTopicProgress(topicId,updated)
+      setLoading(false);
+
+    })()
+},[completedResourcesIDs])
+
   const onExerciseComplete = async (exercise: Exercise) =>{
-    if(!userTopicProgress){return}
-    const updated = await DataStore.save(UserTopicProgress.copyOf(userTopicProgress,(updated)=>{
-      if(!updated.completedExercisesIDs.includes(exercise.id)){
-      updated.completedExercisesIDs.push(exercise.id);
-       const progress = (userTopicProgress.completedResourcesIDs.length + userTopicProgress.completedExercisesIDs.length + 1)
-      / (resources.length + exercises.length )
-      updated.progress = progress;
-      }
-    }));
-    setUserTopicProgress(updated)
+    if(
+      loading ||
+      !userTopicProgress || 
+      completedExercisesIDs.includes(exercise.id)){
+        // console.log("Loading... ")
+
+      return
+    }
+    // console.log("Updating Ex: ",exercise.id)
+    setLoading(true)
+    const ids  = [
+      ...completedExercisesIDs,
+      exercise.id
+    ];
+      const updated = await DataStore.save(UserTopicProgress.copyOf(userTopicProgress,(updated)=>{
+      
+     
+        updated.completedExercisesIDs = ids
+          updated.progress = getNextProgress()
+       
+      }));
+      setCompletedExercisesIDs(ids)
+    setUserTopicProgress(updated);
+    updateTopicProgress(topicId,updated)
+    
+    setLoading(false)
+
   }
+
+const getNextProgress = () =>{
+  return    (completedResourcesIDs.length + completedExercisesIDs.length + 1)
+  / (resources.length + exercises.length )
+  
+}
 
   if(!topic && !userTopicProgress){
     return <ActivityIndicator />
@@ -129,7 +219,7 @@ const TopicScreen = ({ route, navigation }: RootStackScreenProps<'Topic'>) => {
             index={index}
             isLast={index + 1 === resources.length}
             onComplete={onResourceComplete}
-            isCompleted={userTopicProgress?.completedResourcesIDs.includes(resource.id)}
+            isCompleted={completedResourcesIDs.includes(resource.id)}
           />
 
         ))}
@@ -146,7 +236,7 @@ const TopicScreen = ({ route, navigation }: RootStackScreenProps<'Topic'>) => {
             index={index}
             isLast={index + 1 === exercises.length}
             onComplete={onExerciseComplete}
-            isCompleted={userTopicProgress?.completedExercisesIDs.includes(resource.id)}
+            isCompleted={completedExercisesIDs.includes(resource.id)}
 
           />
 
