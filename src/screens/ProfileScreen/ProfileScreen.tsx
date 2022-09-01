@@ -5,13 +5,18 @@ import sadboy from '../../../assets/images/sadboy.png'
 import Colors from '../../constants/Colors'
 import CustomButton from '../../components/CustomButton'
 import { Auth } from 'aws-amplify'
+import { useUserContext } from '../../contexts/UserContext'
 const ProfileScreen = () => {
+
+  const {email} = useUserContext();
+
+
   return (
     <View style={styles.container}>
       <View style={styles.avatar}>
       <Image  source={happyboy} resizeMode="contain" style={styles.image} />
       </View>
-      <Text style={styles.name}>L.Q.H</Text>
+      <Text style={styles.name}>{email}</Text>
       <View style={styles.buttonContainer}>
       <CustomButton text="Sign out" type="SECONDARY" 
       onPress={()=> Auth.signOut()}/>

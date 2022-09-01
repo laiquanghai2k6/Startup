@@ -1,0 +1,6 @@
+[
+  {
+    "Action": ["dynamodb:Scan"],
+    "Resource": ["arn:aws:dynamodb:us-west-1:695108488387:table/User-tnhsjbwq3zegzk4nrsdz767fpy-*"]
+  }
+]

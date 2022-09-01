@@ -25,9 +25,9 @@ const ResourceListItem = ({
   }
 }: ResourceListItemProps) => {
   const onPress = ()=>{
-    // if(resource.url){
-    // WebBrowser.openBrowserAsync(resource.url);
-    // }
+    if(resource.url){
+    WebBrowser.openBrowserAsync(resource.url);
+    }
     onComplete(resource);
     if(resource instanceof Exercise){
       Analytics.record({

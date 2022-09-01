@@ -4,27 +4,35 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useCachedResources from './src/hooks/useCachedResources';
 import useColorScheme from './src/hooks/useColorScheme';
 import Navigation from './src/navigation';
-import {Amplify} from 'aws-amplify';
+import { Amplify } from 'aws-amplify';
 import awsconfig from './src/aws-exports';
 
-import {withAuthenticator,AmplifyTheme} from 'aws-amplify-react-native'
+import { withAuthenticator, AmplifyTheme } from 'aws-amplify-react-native'
 import Colors from './src/constants/Colors';
 import ModuleContextProvider from './src/contexts/ModuleContext'
-
-Amplify.configure({...awsconfig});
+import { useEffect } from 'react';
+import { registerForPushNotificationsAsync } from './src/utils/pushNotifications';
+import React from 'react'
+import UserContextProvider from './src/contexts/UserContext';
+Amplify.configure({ ...awsconfig });
 
 function App() {
+  console.reportErrorsAsExceptions = false;
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
+
+
 
   if (!isLoadingComplete) {
     return null;
   } else {
     return (
       <SafeAreaProvider>
-        <ModuleContextProvider>
-        <Navigation colorScheme={colorScheme} />
-        </ModuleContextProvider>
+        <UserContextProvider>
+          <ModuleContextProvider>
+            <Navigation colorScheme={colorScheme} />
+          </ModuleContextProvider>
+        </UserContextProvider>
         <StatusBar />
       </SafeAreaProvider>
     );
@@ -32,50 +40,50 @@ function App() {
 }
 
 const signUpConfig = {
-  hideAllDefaults:true,
-  signUpFields:[
-   
+  hideAllDefaults: true,
+  signUpFields: [
+
     {
-      label:'Email',
-      key:'username',
-      required:true,
-      displayOrder:2,
-      type:'string',
-      placeholder:'Email',
+      label: 'Email',
+      key: 'username',
+      required: true,
+      displayOrder: 2,
+      type: 'string',
+      placeholder: 'Email',
     },
-   
+
     {
-      label:'Password',
-      key:'password',
-      required:true,
-      displayOrder:4,
-      type:'password',
-      placeholder:'Password',
+      label: 'Password',
+      key: 'password',
+      required: true,
+      displayOrder: 4,
+      type: 'password',
+      placeholder: 'Password',
     },
   ],
 };
 
 const customTheme = {
   ...AmplifyTheme,
-  button:{
+  button: {
     ...AmplifyTheme.button,
     backgroundColor: Colors.light.blue,
-    borderRadius:20,
+    borderRadius: 20,
   },
-  buttonDisabled:{
+  buttonDisabled: {
     ...AmplifyTheme.buttonDisabled,
-    backgroundColor:Colors.light.tabIconDefault,
-    borderRadius:20,
+    backgroundColor: Colors.light.tabIconDefault,
+    borderRadius: 20,
   },
-  sectionFooterLink:{
+  sectionFooterLink: {
     ...AmplifyTheme.sectionFooterLink,
-    color:Colors.light.blue
+    color: Colors.light.blue
   },
-  background:{
+  background: {
     ...AmplifyTheme.background,
-    backgroundColors:Colors.light.primary
+    backgroundColors: Colors.light.primary
   }
 }
 
 
-export default withAuthenticator(App, {signUpConfig,theme:customTheme});
+export default withAuthenticator(App, { signUpConfig, theme: customTheme });

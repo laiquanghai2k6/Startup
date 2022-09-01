@@ -4,6 +4,10 @@ import { ModelInit, MutableModel, PersistentModelConstructor } from "@aws-amplif
 
 
 
+type UserMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
 type ExerciseMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
@@ -30,6 +34,16 @@ type UserTopicProgressMetaData = {
 
 type QuizResultMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
+export declare class User {
+  readonly id: string;
+  readonly sub: string;
+  readonly expoNotificationToken?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  constructor(init: ModelInit<User, UserMetaData>);
+  static copyOf(source: User, mutator: (draft: MutableModel<User, UserMetaData>) => MutableModel<User, UserMetaData> | void): User;
 }
 
 export declare class Exercise {

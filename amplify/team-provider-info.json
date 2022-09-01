@@ -15,6 +15,13 @@
       "auth": {
         "Startup": {},
         "true": {}
+      },
+      "function": {
+        "DailyReminderNotification": {
+          "deploymentBucketName": "amplify-startup-staging-133903-deployment",
+          "s3Key": "amplify-builds/DailyReminderNotification-692b3230534a4a6f4837-build.zip",
+          "userTable": "User-tnhsjbwq3zegzk4nrsdz767fpy-staging"
+        }
       }
     }
   }
