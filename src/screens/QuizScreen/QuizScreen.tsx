@@ -1,5 +1,5 @@
 import { View, Text, Image, ScrollView, Alert, ActivityIndicator } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import quiz from '../../../assets/data/quiz'
 import Markdown from 'react-native-markdown-display';
 import MultipleChoiceAnswer from '../../components/MultipleChoiceAnswer/MultipleChoiceAnswer';
@@ -13,6 +13,7 @@ import { Analytics, Auth, DataStore } from 'aws-amplify';
 import { Quiz, QuizQuestion, QuizResult } from '../../models';
 import { S3Image } from 'aws-amplify-react-native'
 import { UserTopicProgress } from '../../models';
+import { shuffle } from '../../utils/utils';
 
 
 
@@ -32,6 +33,10 @@ const QuizScreen = ({ navigation, route }: RootStackScreenProps<"Quiz">) => {
 
 
   const quizId = route.params.id;
+
+  const choices = useMemo(()=>shuffle([...(question?.choices || [])]),[question])
+
+
   useEffect(()=>{
     if(quizId){
       Analytics.record({
@@ -78,10 +83,7 @@ const QuizScreen = ({ navigation, route }: RootStackScreenProps<"Quiz">) => {
 
   }, [quiz])
     // console.log(questions)
-
   useApplyHeaderWorkaround(navigation.setOptions)
-
-
   useEffect( () => {
     (async ()=>{
       if (questionIndex === questions.length && questionIndex > 0) {
@@ -108,22 +110,15 @@ const QuizScreen = ({ navigation, route }: RootStackScreenProps<"Quiz">) => {
             }
           })
         }
-      
-
-
           navigation.navigate("QuizEndScreen", {
             nofQuestions: questions.length,
             nofCorrectAnswer: numberOfCorrectAnswers,
-          });
-  
-        
+          });     
         return;
-      }
-  
+      } 
       // setQuestion(quiz[questionIndex]);
       setAnsweredCorrectly(undefined);
     })()
-    
   }, [questionIndex])
 
   const onChoicePress = (choice: string) => {
@@ -181,9 +176,9 @@ const QuizScreen = ({ navigation, route }: RootStackScreenProps<"Quiz">) => {
 
         {!!question.content && <Markdown>{question.content}</Markdown>}
 
-        {question.choices && (
+        {choices && (
           <View style={styles.choicesContainer}>
-            {question.choices?.map((choice) => (
+            {choices?.map((choice) => (
               <MultipleChoiceAnswer
                 key={choice}
                 choice={choice}

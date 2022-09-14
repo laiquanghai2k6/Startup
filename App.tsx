@@ -14,6 +14,9 @@ import { useEffect } from 'react';
 import { registerForPushNotificationsAsync } from './src/utils/pushNotifications';
 import React from 'react'
 import UserContextProvider from './src/contexts/UserContext';
+import NewPostScreen from './src/screens/NewPostScreen';
+import { Provider } from 'react-redux';
+import { store } from './src/redux/store';
 Amplify.configure({ ...awsconfig });
 
 function App() {
@@ -27,6 +30,7 @@ function App() {
     return null;
   } else {
     return (
+      <Provider store={store}>
       <SafeAreaProvider>
         <UserContextProvider>
           <ModuleContextProvider>
@@ -35,7 +39,10 @@ function App() {
         </UserContextProvider>
         <StatusBar />
       </SafeAreaProvider>
+      </Provider>
     );
+    // <NewPostScreen />
+    
   }
 }
 

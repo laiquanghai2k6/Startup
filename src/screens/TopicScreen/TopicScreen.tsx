@@ -12,66 +12,51 @@ import useApplyHeaderWorkaround from '../../hooks/useApplyHeaderWorkaround'
 import { Analytics, Auth, DataStore } from 'aws-amplify'
 import { Topic, Resource, Exercise, UserTopicProgress } from '../../models'
 import { useModuleContext } from '../../contexts/ModuleContext'
+import { LinearGradient } from 'expo-linear-gradient';
+import TopicHeader from './TopicHeader'
 const TopicScreen = ({ route, navigation }: RootStackScreenProps<'Topic'>) => {
 
-  const { updateTopicProgress} = useModuleContext()
+  const { updateTopicProgress } = useModuleContext()
   const [topic, setTopic] = useState<Topic>();
   const [userTopicProgress, setUserTopicProgress] =
     useState<UserTopicProgress>()
   const [resources, setResources] = useState<Resource[]>([]);
   const [exercises, setExercises] = useState<Exercise[]>([]);
-  const [completedExercisesIDs,setCompletedExercisesIDs] = useState<string[]>([]);
-  const [completedResourcesIDs,setCompletedResourcesIDs] = useState<string[]>([]);
-  const [loading,setLoading] = useState(false);
-
+  const [completedExercisesIDs, setCompletedExercisesIDs] = useState<string[]>([]);
+  const [completedResourcesIDs, setCompletedResourcesIDs] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
   const topicId = route.params.id;
-
-  useEffect(()=>{
-    if(topicId){
+  useEffect(() => {
+    if (topicId) {
       Analytics.record({
         name: 'topicOpened',
-        attributes:{id:topicId}
+        attributes: { id: topicId }
       })
     }
-  },[topicId])
-
-
-
+  }, [topicId])
   useEffect(() => {
     setLoading(true)
     DataStore.query(Topic, topicId).then(setTopic)
-    
   }, [topicId]);
-    // console.log(topic)
-
-  useEffect(() => {
-    if (topic) {
-      navigation.setOptions({ title: topic?.title })
-    }
+  // console.log(topic)
+  useEffect(() => {  
     const fetchTopicDetails = async () => {
       if (!topic) {
         return;
       }
       const resources = await DataStore.query(Resource);
       setResources(resources.filter((r) => r.topicID === topic.id));
-
-
       const exercises = await DataStore.query(Exercise)
       setExercises(exercises.filter((r) => r.topicID === topic.id));
-
       const userData = await Auth.currentAuthenticatedUser()
       const userTopicProgresses = await DataStore.query(UserTopicProgress);
-   
-
-
       const userProgress = userTopicProgresses.find(
         (tp) => tp.topicId === topic?.id && tp.sub === userData?.attributes.sub
-
       );
       if (userProgress) {
         setUserTopicProgress(userProgress);
-         setCompletedExercisesIDs(userProgress.completedExercisesIDs);
-        setCompletedResourcesIDs ( userProgress.completedResourcesIDs)
+        setCompletedExercisesIDs(userProgress.completedExercisesIDs);
+        setCompletedResourcesIDs(userProgress.completedResourcesIDs)
       } else {
         const newUserProgress = await DataStore.save(
           new UserTopicProgress({
@@ -80,9 +65,8 @@ const TopicScreen = ({ route, navigation }: RootStackScreenProps<'Topic'>) => {
             completedResourcesIDs: [],
             progress: 0,
             topicId: topic.id
-
           }))
-          setUserTopicProgress(newUserProgress)
+        setUserTopicProgress(newUserProgress)
       }
       setLoading(false)
     }
@@ -106,7 +90,7 @@ const TopicScreen = ({ route, navigation }: RootStackScreenProps<'Topic'>) => {
   //   }
 
   // },[userTopicProgress?.id]);
- 
+
 
 
   useApplyHeaderWorkaround(navigation.setOptions)
@@ -120,141 +104,150 @@ const TopicScreen = ({ route, navigation }: RootStackScreenProps<'Topic'>) => {
     }
   }
 
- 
- 
-  const onResourceComplete = async (resource: Resource) =>{
-    if(
+
+
+  const onResourceComplete = async (resource: Resource) => {
+    if (
       loading ||
       !userTopicProgress ||
-       completedResourcesIDs.includes(resource.id)){
-      return}
+      completedResourcesIDs.includes(resource.id)) {
+      return
+    }
     // setLoading(true)
-    
-      // const updated = await DataStore.save(UserTopicProgress.copyOf(userTopicProgress,(updated)=>{
-      //   updated.completedResourcesIDs = ids;
- 
-      //   updated.progress = getNextProgress();
-        
-      // }));
-      setCompletedResourcesIDs((existing) => 
-        existing.includes(resource.id) ? existing : [...existing,resource.id]
-      )
+
+    // const updated = await DataStore.save(UserTopicProgress.copyOf(userTopicProgress,(updated)=>{
+    //   updated.completedResourcesIDs = ids;
+
+    //   updated.progress = getNextProgress();
+
+    // }));
+    setCompletedResourcesIDs((existing) =>
+      existing.includes(resource.id) ? existing : [...existing, resource.id]
+    )
     // setUserTopicProgress(updated)
     // updateTopicProgress(topicId,updated)
-    
+
     // setLoading(false)
 
   }
-useEffect(()=>{
-  if(!userTopicProgress ||
-    completedResourcesIDs.length ===
-    userTopicProgress?.completedResourcesIDs.length
-    
-    ){
+  useEffect(() => {
+    if (!userTopicProgress ||
+      completedResourcesIDs.length ===
+      userTopicProgress?.completedResourcesIDs.length
+
+    ) {
       return
     }
     (async () => {
       setLoading(true);
-      const updated = await DataStore.save(UserTopicProgress.copyOf(userTopicProgress,(updated)=>{
+      const updated = await DataStore.save(UserTopicProgress.copyOf(userTopicProgress, (updated) => {
         updated.completedResourcesIDs = completedResourcesIDs;
- 
+
         updated.progress = getNextProgress();
-        
+
       })
       );
 
       setUserTopicProgress(updated)
-      updateTopicProgress(topicId,updated)
+      updateTopicProgress(topicId, updated)
       setLoading(false);
 
     })()
-},[completedResourcesIDs])
+  }, [completedResourcesIDs])
 
-  const onExerciseComplete = async (exercise: Exercise) =>{
-    if(
+  const onExerciseComplete = async (exercise: Exercise) => {
+    if (
       loading ||
-      !userTopicProgress || 
-      completedExercisesIDs.includes(exercise.id)){
-        // console.log("Loading... ")
+      !userTopicProgress ||
+      completedExercisesIDs.includes(exercise.id)) {
+      // console.log("Loading... ")
 
       return
     }
     // console.log("Updating Ex: ",exercise.id)
     setLoading(true)
-    const ids  = [
+    const ids = [
       ...completedExercisesIDs,
       exercise.id
     ];
-      const updated = await DataStore.save(UserTopicProgress.copyOf(userTopicProgress,(updated)=>{
-      
-     
-        updated.completedExercisesIDs = ids
-          updated.progress = getNextProgress()
-       
-      }));
-      setCompletedExercisesIDs(ids)
+    const updated = await DataStore.save(UserTopicProgress.copyOf(userTopicProgress, (updated) => {
+
+
+      updated.completedExercisesIDs = ids
+      updated.progress = getNextProgress()
+
+    }));
+    setCompletedExercisesIDs(ids)
     setUserTopicProgress(updated);
-    updateTopicProgress(topicId,updated)
-    
+    updateTopicProgress(topicId, updated)
+
     setLoading(false)
 
   }
 
-const getNextProgress = () =>{
-  return    (completedResourcesIDs.length + completedExercisesIDs.length + 1)
-  / (resources.length + exercises.length )
-  
-}
+  const getNextProgress = () => {
+    return (completedResourcesIDs.length + completedExercisesIDs.length + 1)
+      / (resources.length + exercises.length)
 
-  if(!topic && !userTopicProgress){
+  }
+
+  if (!topic && !userTopicProgress) {
     return <ActivityIndicator />
   }
 
 
+  
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <TopicSection title='Intro' display={!!topic?.description}>
-        <Markdown>
-          {topic?.description}
-        </Markdown>
-      </TopicSection>
 
-      <TopicSection title='Resources' display={!!resources.length}>
+        <TopicHeader
+        title={topic?.title || ""}
+        id={topic?.id || ""}
+        />
+      <View style={styles.contentContainer}>
+        <TopicSection title='Intro' display={!!topic?.description}>
+          <Markdown>
+            {topic?.description}
+          </Markdown>
+        </TopicSection>
 
-        {resources.map((resource, index) => (
-          <ResourceListItem
-            key={resource.id}
-            resource={resource}
-            index={index}
-            isLast={index + 1 === resources.length}
-            onComplete={onResourceComplete}
-            isCompleted={completedResourcesIDs.includes(resource.id)}
-          />
+        <TopicSection title='Resources' display={!!resources.length}>
 
-        ))}
-      </TopicSection>
+          {resources.map((resource, index) => (
+            <ResourceListItem
+              key={resource.id}
+              resource={resource}
+              index={index}
+              isLast={index + 1 === resources.length}
+              onComplete={onResourceComplete}
+              isCompleted={completedResourcesIDs.includes(resource.id)}
+            />
+
+          ))}
+        </TopicSection>
 
 
 
-      <TopicSection title='Practice' display={!!exercises.length}>
+        <TopicSection title='Practice' display={!!exercises.length}>
 
-        {exercises.map((resource, index) => (
-          <ResourceListItem
-            key={resource.id}
-            resource={resource}
-            index={index}
-            isLast={index + 1 === exercises.length}
-            onComplete={onExerciseComplete}
-            isCompleted={completedExercisesIDs.includes(resource.id)}
+          {exercises.map((resource, index) => (
+            <ResourceListItem
+              key={resource.id}
+              resource={resource}
+              index={index}
+              isLast={index + 1 === exercises.length}
+              onComplete={onExerciseComplete}
+              isCompleted={completedExercisesIDs.includes(resource.id)}
 
-          />
+            />
 
-        ))}
-      </TopicSection>
+          ))}
+        </TopicSection>
 
-      {topic?.topicQuizId && (
-        <CustomButton text={"Start Quiz"} onPress={onStartQuiz} />
-      )}
+        {topic?.topicQuizId && (
+          <CustomButton text={"Start Quiz"} onPress={onStartQuiz} />
+        )}
+      </View>
     </ScrollView>
   )
 }
@@ -263,19 +256,34 @@ const styles = StyleSheet.create({
 
   container: {
     backgroundColor: Colors.light.white,
-    
-    padding: 10,
+
     flexGrow: 1
 
   },
-  title: {
+  titles: {
 
-    fontSize: 15,
-    fontWeight: '500',
-    letterSpacing: 1.1,
-    marginTop: 25,
-    marginBottom: 10
+    fontSize:30,
+    fontWeight:'500',
+    letterSpacing:1.2,
+    color:'white'
   },
+  contentContainer: {
+    padding: 10
+  },
+  backgroundHeader: {
+    height: 200,
+    justifyContent:'flex-end',
+    padding:10,
+    paddingBottom:20,
+    borderBottomEndRadius:20,
+    borderBottomStartRadius:20,
+    overflow:'hidden'
+  },
+  subtitle:{
+    fontSize:20,
+    color:Colors.light.darkL
+  }
+
 
 })
 

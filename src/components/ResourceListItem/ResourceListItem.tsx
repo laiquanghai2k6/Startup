@@ -51,8 +51,7 @@ const ResourceListItem = ({
        ) :(
          <Text>{index + 1}</Text>
         )
-       }
-       
+       }      
       </View>
       <Text style={{ color: 'black' }}>{resource.title}</Text>
       { resource.url && (<Entypo

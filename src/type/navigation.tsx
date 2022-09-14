@@ -20,6 +20,7 @@ export type RootStackParamList = {
   Topic: {id: string};
   Quiz: {id: string};
   QuizEndScreen: {nofQuestions:number; nofCorrectAnswer:number};
+  NewPostScreen: NavigatorScreenParams<RootTabParamList> | undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<
@@ -32,6 +33,7 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> = Nati
 export type RootTabParamList = {
   Module: undefined;
   Profile: undefined;
+  NewFeed:undefined;
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> = CompositeScreenProps<
