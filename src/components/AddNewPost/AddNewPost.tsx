@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import FormikPostUploader from './FormikPostUploader'
+import { useNavigation } from '@react-navigation/native'
 
 const AddNewPost = ({navigation}: any) => {
     return (

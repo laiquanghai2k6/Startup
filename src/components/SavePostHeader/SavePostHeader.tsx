@@ -14,23 +14,7 @@ const NewFeedHeader = () => {
             source={require('../../../assets/images/NewFeedName.png')}
         />
        </TouchableOpacity>  
-
-        <View style={styles.iconsContainer}>
-            <TouchableOpacity onPress={()=> navigation.navigate('NewPostScreen')}>
-                <Image
-                    style={styles.icon}
-                    source={require('../../../assets/images/NewFeedIconPlus.png')}
-                />
-            </TouchableOpacity>
-                
-            <TouchableOpacity onPress={()=> navigation.navigate('SavePostScreen') } >
-                <Image
-                    style={[styles.icon,{width:25,height:25,marginTop:23}]}
-                    source={{uri:'https://img.icons8.com/external-bearicons-detailed-outline-bearicons/344/ffffff/external-Save-social-media-bearicons-detailed-outline-bearicons.png'}}
-                    
-                />
-
-            </TouchableOpacity>
+                  
               
             <TouchableOpacity>
                 <View style={styles.unreadBadge}>
@@ -44,7 +28,7 @@ const NewFeedHeader = () => {
             </TouchableOpacity>
         </View>
 
-    </View>
+   
   )
 }
 

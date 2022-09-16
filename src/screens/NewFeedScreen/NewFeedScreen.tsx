@@ -6,8 +6,20 @@ import Post from '../../components/Post'
 import { POSTS } from '../../../assets/data/post'
 
 import { useSelector } from 'react-redux'
-import { selectNewFeed } from './newFeedSlice'
+import { AddNewFeed, Comment, selectNewFeed } from './newFeedSlice'
 import { useAppSelector } from '../../redux/hook'
+import { selectComment } from '../../components/Post/commentSlice'
+
+// const comment: Comment[] = []
+
+//     {POSTS.map((post, index)=>{
+
+//         comment.push(post.comments)
+
+//     })}
+//     console.log(comment)
+// const posts = useAppSelector(selectComment)
+// console.log("ff",posts)
 
 const NewFeedScreen = ({navigation}: any) => {
   // console.log(POSTS)
@@ -21,7 +33,7 @@ const NewFeedScreen = ({navigation}: any) => {
       <Stories />
       <ScrollView>
         {posts.map((post,index)=>(
-          <Post post={post} key={index} />
+          <Post post={post}  key={index} />
           
         ))}
        

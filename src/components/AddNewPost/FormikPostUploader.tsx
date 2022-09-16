@@ -7,8 +7,8 @@ import { Divider } from 'react-native-elements'
 import {validUrl} from 'valid-url'
 import { POSTS } from '../../../assets/data/post'
 import { USERS } from '../../../assets/data/userStory'
-import { useAppDispatch } from '../../redux/hook'
-import { AddNewFeed, newFeedActions } from '../../screens/NewFeedScreen/newFeedSlice'
+import { useAppDispatch, useAppSelector } from '../../redux/hook'
+import { AddNewFeed, newFeedActions, selectNewFeed } from '../../screens/NewFeedScreen/newFeedSlice'
 const PLACEHOLDER_IMG =
 
     'https://th.bing.com/th/id/OIP.QrR56voakzVibJnCtTWw7gHaEK?pid=ImgDet&rs=1'
@@ -24,27 +24,14 @@ const FormikPostUploader = ({navigation}: any) => {
     const [thumbnailUrl, setThumbnailUrl] = useState(PLACEHOLDER_IMG)
     // let post = {}
     const dispatch = useAppDispatch()
-   
+   const posts = useAppSelector(selectNewFeed)
+
     return (
         <Formik
-            initialValues={{ caption: '', imageUrl: '' }}
+            initialValues={{ caption: '', imageUrl: ''}}
             onSubmit={(values) => {
-                // console.log(values)
-                // console.log("ur post submitted nice")
-                // navigation.goBack()
-                // POSTS.push(
-                //     {imageUrl:values.imageUrl}
-                //     {user:USERS[2].user},
-                //     {like:1.23},
-                //     {caption:values.caption},
-                //     {profilePicture:USERS[2].image},
-                //     {comments:{
-                //         user:USERS[3].user,
-                //         comment:'bruh'
-                //     }}
+                  
                 
-                    
- //                   )
                     const post: AddNewFeed = {
                         imageUrl:values.imageUrl,
                         user:USERS[2].user,
@@ -54,14 +41,18 @@ const FormikPostUploader = ({navigation}: any) => {
                         comments:[{
                             user:USERS[3].user,
                             comment:'bruh'
-                        }]
+                        }],
+                        
+                        num: posts.length+1
+                        
                     }
-                    dispatch(newFeedActions.add(post))
+                    
+                    
+                    dispatch(newFeedActions.addPost(post))
                    
                    
                     navigation.goBack()
-                   
-
+ 
             }}
             validationSchema={uploadPostSchema}
             validateOnMount={true}

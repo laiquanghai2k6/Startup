@@ -6,6 +6,7 @@
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { POSTS } from '../../assets/data/post';
 
 declare global {
   namespace ReactNavigation {
@@ -21,6 +22,7 @@ export type RootStackParamList = {
   Quiz: {id: string};
   QuizEndScreen: {nofQuestions:number; nofCorrectAnswer:number};
   NewPostScreen: NavigatorScreenParams<RootTabParamList> | undefined;
+  SavePostScreen: NavigatorScreenParams<RootTabParamList> | undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<

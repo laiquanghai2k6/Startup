@@ -22,6 +22,7 @@ import QuizScreen from '../screens/QuizScreen';
 import QuizEndScreen from '../screens/QuizEndScreen';
 import NewFeedScreen from '../screens/NewFeedScreen';
 import NewPostScreen from '../screens/NewPostScreen';
+import SavePostScreen from '../screens/SavePostScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -73,6 +74,12 @@ function RootNavigator() {
         <Stack.Screen
         name="NewPostScreen"
         component={NewPostScreen}
+        options={{ headerShown:false }}
+
+      />
+        <Stack.Screen
+        name="SavePostScreen"
+        component={SavePostScreen}
         options={{ headerShown:false }}
 
       />
