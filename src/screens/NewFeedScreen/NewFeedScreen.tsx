@@ -6,27 +6,16 @@ import Post from '../../components/Post'
 import { POSTS } from '../../../assets/data/post'
 
 import { useSelector } from 'react-redux'
-import { AddNewFeed, Comment, selectNewFeed } from './newFeedSlice'
+import { AddNewFeed, Comment, selectNewFeed } from '../../slice/newFeedSlice'
 import { useAppSelector } from '../../redux/hook'
-import { selectComment } from '../../components/Post/commentSlice'
 
-// const comment: Comment[] = []
 
-//     {POSTS.map((post, index)=>{
-
-//         comment.push(post.comments)
-
-//     })}
-//     console.log(comment)
-// const posts = useAppSelector(selectComment)
-// console.log("ff",posts)
 
 const NewFeedScreen = ({navigation}: any) => {
-  // console.log(POSTS)
-  // const [posts, setPosts] = useState(POSTS)
+ 
     const posts = useAppSelector(selectNewFeed)
-    // console.log("Post", posts)
-    // const dispatch = useDispatch()
+ 
+    
   return (
     <View style={styles.container}>
       <NewFeedHeader />

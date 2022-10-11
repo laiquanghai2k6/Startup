@@ -23,6 +23,17 @@ import QuizEndScreen from '../screens/QuizEndScreen';
 import NewFeedScreen from '../screens/NewFeedScreen';
 import NewPostScreen from '../screens/NewPostScreen';
 import SavePostScreen from '../screens/SavePostScreen';
+import MessengerScreen from '../screens/MessengerScreen';
+import ChannelScreen from '../screens/ChannelScreen';
+import AddGroupScreen from '../screens/AddGroupScreen';
+import GroupChatScreen from '../screens/GroupChatScreen';
+import GroupMemberScreen from '../screens/GroupMemberScreen';
+import AddingMemberScreen from '../screens/AddingMemberScreen';
+import StudyScreen from '../screens/StudyScreen';
+
+import QuestionScreen from '../screens/QuestionScreen';
+import PracticesScreen from '../screens/PracticesScreen';
+import AddCourseScreen from '../screens/AddCourseScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -83,6 +94,77 @@ function RootNavigator() {
         options={{ headerShown:false }}
 
       />
+        <Stack.Screen
+        name="ChannelScreen"
+        component={ChannelScreen}
+        options={{ 
+        
+        }}
+        
+
+      /> 
+      <Stack.Screen
+      name="AddGroupScreen"
+      component={AddGroupScreen}
+      options={{ 
+        headerShown:false
+      }}
+      
+
+    />
+     <Stack.Screen
+      name="GroupChatScreen"
+      component={GroupChatScreen}
+      options={{ 
+
+      }}
+    />
+      <Stack.Screen
+      name="GroupMemberScreen"
+      component={GroupMemberScreen}
+      options={{
+         
+      }}
+
+    />
+    
+
+      <Stack.Screen
+      name="AddingMemberScreen"
+      component={AddingMemberScreen}
+      options={{
+         title:'Add Member'
+      }}
+
+    />
+    
+     <Stack.Screen
+      name="PracticesScreen"
+      component={PracticesScreen}
+      options={{
+        title:'Toán Học'
+      }}
+
+    />
+ 
+  
+      <Stack.Screen
+      name="QuestionScreen"
+      component={QuestionScreen}
+      options={{
+       headerShown:false
+      }}
+
+    />
+      <Stack.Screen
+      name="AddCourseScreen"
+      component={AddCourseScreen}
+      options={{
+        title:'Tạo Khóa học'
+      }}
+
+    />
+
       
 
     </Stack.Navigator>
@@ -100,10 +182,10 @@ function BottomTabNavigator() {
   
   return (
     <BottomTab.Navigator
-      initialRouteName="NewFeed"
+      initialRouteName="Study"
       screenOptions={{
         tabBarActiveTintColor: Colors.light.tint,
-
+        
       }}>
          <BottomTab.Screen
         name="NewFeed"
@@ -111,16 +193,26 @@ function BottomTabNavigator() {
         options={{
           title: 'New Feed',
           headerShown:false,
-          tabBarIcon: ({ color }) => <Ionicons name="earth" size={24} color={color} />,
+          tabBarIcon: ({ color }) => <Ionicons name="earth" size={24} color='white' />,
+        }}
+      />
+          <BottomTab.Screen
+        name="Messenger"
+        component={MessengerScreen}
+        options={{
+          title: 'Messenger',
+          headerShown:false,
+          tabBarIcon: ({ color }) => <FontAwesome5 name="facebook-messenger" size={24} color="white" />,
         }}
       />
       <BottomTab.Screen
-        name="Module"
-        component={ModuleScreen}
+        name="Study"
+        component={StudyScreen}
         options={{
-          title: 'Course',
+          headerShown:false,
+          
         
-          tabBarIcon: ({ color }) => (<AntDesign name="book" size={24} color={color} />
+          tabBarIcon: ({ color }) => (<AntDesign name="book" size={24} color='white' />
 
           ),
         }}
@@ -132,7 +224,7 @@ function BottomTabNavigator() {
         options={{
           headerShown:false,
           title: 'Profile',
-          tabBarIcon: ({ color }) => <FontAwesome5 name="user-alt" size={24} color={color} />,
+          tabBarIcon: ({ color }) => <FontAwesome5 name="user-alt" size={24} color='white' />,
         }}
       />
      

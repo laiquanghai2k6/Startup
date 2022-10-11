@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native'
 
 
 
-const NewFeedHeader = () => {
+const SavePostHeader = () => {
     const navigation = useNavigation()
   return (
     <View style={styles.container}>
@@ -76,4 +76,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default NewFeedHeader
+export default SavePostHeader

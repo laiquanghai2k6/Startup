@@ -1,12 +1,18 @@
+import MessengerSlice  from '../slice/MessengerSlice';
 import { savePost } from './../../assets/data/savePost';
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import logger from 'redux-logger';
-import newFeedSlice from '../screens/NewFeedScreen/newFeedSlice';
-import savePostSlice from '../screens/SavePostScreen/savePostSlice';
+import newFeedSlice from '../slice/newFeedSlice';
+import savePostSlice from '../slice/savePostSlice';
+import  AddGroupSlice  from '../slice/AddGroupSlice';
+import ScoreSlice from '../slice/ScoreSlice';
 
 const rootReducer = combineReducers({
     posts: newFeedSlice,
-    savePost:savePostSlice
+    savePost:savePostSlice,
+    messenger:MessengerSlice,
+    addGroup:AddGroupSlice,
+    score:ScoreSlice
     // comments: commentSlice,
 });
 

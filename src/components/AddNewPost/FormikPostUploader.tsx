@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Image ,Button} from 'react-native'
+import { View, Text, TextInput, Image ,Button, KeyboardAvoidingView, Platform} from 'react-native'
 import React, { useState } from 'react'
 import { yupToFormErrors } from 'formik'
 import * as Yup from 'yup'
@@ -8,7 +8,7 @@ import {validUrl} from 'valid-url'
 import { POSTS } from '../../../assets/data/post'
 import { USERS } from '../../../assets/data/userStory'
 import { useAppDispatch, useAppSelector } from '../../redux/hook'
-import { AddNewFeed, newFeedActions, selectNewFeed } from '../../screens/NewFeedScreen/newFeedSlice'
+import { AddNewFeed, newFeedActions, selectNewFeed } from '../../slice/newFeedSlice'
 const PLACEHOLDER_IMG =
 
     'https://th.bing.com/th/id/OIP.QrR56voakzVibJnCtTWw7gHaEK?pid=ImgDet&rs=1'
@@ -70,6 +70,14 @@ const FormikPostUploader = ({navigation}: any) => {
                         />
 
                         <View style={{flex:1,marginLeft:12}}>
+                        <KeyboardAvoidingView
+                            behavior={Platform.OS === "ios" ? "padding" : null}
+                            style={{flex:1}}
+                            keyboardVerticalOffset={Platform.select({
+                            ios: 30,
+                            android: 20,
+                            })}
+                        >
                             <TextInput
                                 style={{ color: 'white', fontSize: 16 }}
                                 placeholder='Write a caption...'
@@ -79,6 +87,7 @@ const FormikPostUploader = ({navigation}: any) => {
                                 onBlur={handleBlur('caption')}
                                 value={values.caption}
                             />
+                        </KeyboardAvoidingView>
                         </View>
                     </View>
                     <Divider width={0.2} orientation='vertical' />

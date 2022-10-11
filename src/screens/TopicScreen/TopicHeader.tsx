@@ -1,7 +1,10 @@
-import { View, Text ,StyleSheet} from 'react-native'
+import { View, Text ,StyleSheet,Image} from 'react-native'
 import React, { useEffect, useMemo } from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
 import Colors from '../../constants/Colors'
+import { SCORE } from '../../../assets/data/score'
+import { useAppSelector } from '../../redux/hook'
+import { selectScore } from '../../slice/ScoreSlice'
 
 const gradients = [
   ['#00C9FF', '#92FE9D'],
@@ -24,26 +27,34 @@ const gradients = [
     )
   }
 
-const TopicHeader = ({title,id}: {title: string; id: string}) => {
+const TopicHeader = () => {
+  const score = useAppSelector(selectScore)
+
   const [gradientIndex,setGradientIndex] = React.useState(0);
   
   const gradient = useMemo(
    
    ()=> gradients[Math.floor(Math.random() * gradients.length)],
-   [title]
+   []
   )
-
-    // console.log(kindaRandomNumber("0",gradients.length));
-
   return (
     <LinearGradient
         // Background Linear Gradient
         // colors={['#00F260', '#0575E6']}
-        colors={gradient}
+        colors={['#1FA2FF','#12D8FA','#A6FFCB']}
         style={styles.backgroundHeader}
 
-      ><Text style={styles.titles}>{title}</Text>
-        <Text style={styles.subtitle}>JS 101</Text>
+      >
+        <Text style={styles.titles}>Khóa học</Text>
+        <View style={{flexDirection:'row',marginRight:20,alignItems:'center'}}>
+
+        <Text style={styles.subtitle}>Số điểm hiện tại :</Text>
+        <Image 
+      source={{uri:'https://img.icons8.com/external-febrian-hidayat-flat-febrian-hidayat/344/external-trophy-ui-essential-febrian-hidayat-flat-febrian-hidayat.png'}}
+      style={{width:30,height:30}}
+      />
+      <Text style={{color:'white',fontSize:15,fontWeight:'700'}}>{score.score}</Text>
+      </View>
         </LinearGradient>
   )
 }
@@ -63,7 +74,8 @@ const styles = StyleSheet.create({
       padding: 10
     },
     backgroundHeader: {
-      height: 200,
+      marginBottom:10,
+      height: 150,
       justifyContent:'flex-end',
       padding:10,
       paddingBottom:20,
@@ -81,7 +93,7 @@ const styles = StyleSheet.create({
     },
     subtitle:{
       fontSize:20,
-      color:Colors.light.darkL
+      color:'white'
     },
 })
 

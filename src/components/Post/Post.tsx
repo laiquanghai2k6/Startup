@@ -1,11 +1,12 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, Pressable, TextInput, Alert } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity, Pressable, TextInput, Alert, KeyboardAvoidingView, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Divider } from 'react-native-elements'
 import { POSTS } from '../../../assets/data/post'
-import { AddComment, AddLike, AddNewFeed, Comment, newFeedActions, selectNewFeed } from '../../screens/NewFeedScreen/newFeedSlice'
+import { AddComment, AddLike, AddNewFeed, Comment, newFeedActions, selectNewFeed } from '../../slice/newFeedSlice'
 import { useAppDispatch, useAppSelector } from '../../redux/hook'
 import { USERS } from '../../../assets/data/userStory'
-import { saveActions } from '../../screens/SavePostScreen/savePostSlice'
+import { saveActions } from '../../slice/savePostSlice'
+import { Ionicons } from '@expo/vector-icons'
 
 const postFooterIcons = [
     {
@@ -37,7 +38,7 @@ const postFooterIcons = [
 
 
 const Post = ({ post }: any) => {
-    
+
 
 
 
@@ -97,9 +98,9 @@ const PostImage = ({ post }: any) => {
     )
 }
 
-const PostFooter = ({ post,num }: any) => {
+const PostFooter = ({ post, num }: any) => {
     const [text, onChangeText] = React.useState("Useless Text");
-   
+
     return (
         <View style={{ flexDirection: 'row' }}>
             <View style={styles.leftFooterIconsContainer}>
@@ -115,51 +116,51 @@ const PostFooter = ({ post,num }: any) => {
 
 
                     <TouchableOpacity >
-                         <Image style={[styles.footerIcon,{marginLeft:10}]}
-                        source={{ uri: postFooterIcons[2].imageUrl }}
-            />
+                        <Image style={[styles.footerIcon, { marginLeft: 10 }]}
+                            source={{ uri: postFooterIcons[2].imageUrl }}
+                        />
                     </TouchableOpacity>
                 </View>
             </View>
             <View style={{ alignItems: 'flex-end', flex: 1 }}>
-                <IconSave 
-                post={post}
+                <IconSave
+                    post={post}
                 />
             </View>
 
         </View>
     )
 }
-const IconSave = ({post}: any) =>{
+const IconSave = ({ post }: any) => {
     const dispatch = useAppDispatch()
-    const onPress = () =>{
-        
-        
-    
+    const onPress = () => {
+
+
+
         dispatch(saveActions.savePost(post))
-        
-            Alert.alert(
-                'Lưu thành công!',
-                '',
-                [
+
+        Alert.alert(
+            'Lưu thành công!',
+            '',
+            [
                 {
-                text: 'Ok',
-                onPress: () => {}
-                
+                    text: 'Ok',
+                    onPress: () => { }
+
                 },
-                
-                ]
-                );
-        
+
+            ]
+        );
+
     }
-    
-    return(
+
+    return (
         <TouchableOpacity onPress={onPress}>
-         
-                    <Image 
-                        style={styles.footerIcon}
-                        source={{uri:postFooterIcons[3].imageUrl}}
-                    />
+
+            <Image
+                style={styles.footerIcon}
+                source={{ uri: postFooterIcons[3].imageUrl }}
+            />
 
         </TouchableOpacity>
     )
@@ -168,11 +169,11 @@ const IconSave = ({post}: any) =>{
 const IconLike = ({ imgStyle, imgUrl, post }: any) => {
     const dispatch = useAppDispatch()
     const posts = useAppSelector(selectNewFeed)
-    const [liked,setLiked] = useState(false)
+    const [liked, setLiked] = useState(false)
     const bruh = () => {
-        const add:AddLike = {
-            like:post.like,
-            idPost:post.num
+        const add: AddLike = {
+            like: post.like,
+            idPost: post.num
         }
 
         dispatch(newFeedActions.like(add))
@@ -223,17 +224,31 @@ const IconComment = ({ imgUrl, post }: any) => {
 
     )
 }
-const Comments = ({ post ,num}: any) => {
+
+
+const Comments = ({ post, num }: any) => {
     const [text, setText] = useState("");
-    
+
     const dispatch = useAppDispatch()
     const posts = useAppSelector(selectNewFeed)
-    console.log(text)
+    // console.log(text)
+    const sendComment = () => {
+        const cmt: AddComment = {
+            comment: {
+                user: USERS[2].user,
+                comment: text
+            },
+            idPost: num
+
+        }
+        setText("")
+        dispatch(newFeedActions.updateComment(cmt))
+    }
     return (
         <>
             {post.comments.map((comment: any, index: any) => (
-                
-                
+
+
                 <View key={index} style={{ flexDirection: 'row', marginTop: 5 }}>
                     <Text style={{ color: 'white' }}>
                         <Text style={{ fontWeight: '600' }}>{comment.user}</Text>
@@ -241,50 +256,32 @@ const Comments = ({ post ,num}: any) => {
                     </Text>
                 </View>
             ))}
-            <TextInput
-                style={styles.textComment}
-                placeholder='Write a caption...'
-                placeholderTextColor='gray'
-                
-                multiline={true}
-                value={text}
-                
-                onChangeText={(val)=>setText(val)}
-                 
+            <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : null}
+                style={{ flex: 1 }}
+                keyboardVerticalOffset={Platform.select({
+                    ios: 30,
+                    android: 20,
+                })}
+            >
+                <View style={{flexDirection:'row',alignItems:'center',marginTop:20}}>
+                    <TextInput
+                        style={styles.textComment}
+                        placeholder='Write a caption...'
+                        placeholderTextColor='gray'
 
-                onKeyPress={(value)=>{
-                
-                    
-                    if(value.nativeEvent.key == "Enter"){
-                        
-                        const cmt: AddComment= {
-                            comment:{
-                                user:USERS[2].user,
-                                comment:text
-                            },
-                            idPost :num
-                            
-                        }
-                        setText("")
-                                 
-                        
+                        multiline={true}
+                        value={text}
 
-                        
-                        dispatch(newFeedActions.updateComment(cmt))
-
-                                     
-                    }
-                    // console.log(values)
-                    
-                    
-                }}
-                
-                
-                
-                
-                
-
-            />
+                        onChangeText={(val) => setText(val)}
+                    />
+                    <TouchableOpacity activeOpacity={0.5}
+                        onPress={sendComment}
+                    >
+                        <Ionicons name="send" size={24} color="#2B68B6" />
+                    </TouchableOpacity>
+                </View>
+            </KeyboardAvoidingView>
         </>
 
 
@@ -374,18 +371,19 @@ const styles = StyleSheet.create({
         marginTop: -3,
     },
     textComment: {
-        color: 'white',
         fontSize: 16,
-        height:'auto',
-        width:'auto',
-        // backgroundColor:'white',
-        marginTop:10,
-        borderWidth:2,
-        borderColor:'gray',
-        borderRadius:15,
+        borderWidth: 2,
+        borderColor: 'gray',
+        // paddingLeft: 10,
+        
+        height: 'auto',
+        flex: 1,
+        marginRight: 15,
+        padding:5,
         paddingLeft:10,
-        
-        
+        color: 'gray',
+        borderRadius: 30
+
     }
 })
 

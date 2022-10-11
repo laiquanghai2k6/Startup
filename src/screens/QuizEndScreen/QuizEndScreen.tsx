@@ -5,16 +5,21 @@ import happyboy from '../../../assets/images/happyboy.png'
 import sadboy from '../../../assets/images/sadboy.png'
 import CustomButton from '../../components/CustomButton'
 import Colors from '../../constants/Colors'
+import { SCORE } from '../../../assets/data/score'
+import { useAppDispatch } from '../../redux/hook'
+import { scoreActions } from '../../slice/ScoreSlice'
 
 const QuizEndScreen = ({ route,navigation }: RootStackScreenProps<"QuizEndScreen">) => {
   const { nofQuestions, nofCorrectAnswer } = route.params;
   const percentage = (nofCorrectAnswer / nofQuestions) * 100;
+  const dispatch = useAppDispatch()
   const isHappy = percentage > 70
   const happyText = "Sir! you drop this 👑"
   const sadText = "You suck 🤏"
   const text = isHappy ? happyText : sadText
   const onPress = () =>{
     navigation.navigate("Root")
+    dispatch(scoreActions.addScore(nofCorrectAnswer*20))
   }
   return (
     <View style={styles.container}>
@@ -28,6 +33,13 @@ const QuizEndScreen = ({ route,navigation }: RootStackScreenProps<"QuizEndScreen
         {(nofCorrectAnswer / nofQuestions) * 100}%</Text>
       <Text style={styles.subtitle}>
         {nofCorrectAnswer}/{nofQuestions}</Text>
+        <View style={{marginLeft:'auto',flexDirection:'row',alignItems:'center',bottom:180,right:150}}>
+                <Image 
+      source={{uri:'https://img.icons8.com/external-febrian-hidayat-flat-febrian-hidayat/344/external-trophy-ui-essential-febrian-hidayat-flat-febrian-hidayat.png'}}
+                style={{width:50,height:50}}
+                />
+                <Text style={{fontWeight:'800',fontSize:20}} >+{nofCorrectAnswer*20}</Text>
+              </View>
       <View style={styles.buttonContainer}>
         <CustomButton text="Continue" onPress={onPress} />
       </View>

@@ -4,7 +4,7 @@ import Colors from '../../constants/Colors';
 
 interface CustomButtonProps extends PressableProps {
     text: string;
-    type?:"PRIMARY" | "SECONDARY" | "TERTIARY";
+    type?:"PRIMARY" | "SECONDARY" | "TERTIARY" | "BLUE";
 }
 
 
@@ -45,6 +45,10 @@ const styles = StyleSheet.create({
         fontWeight:'500',
 
     },
+    container_BLUE:{
+        backgroundColor:Colors.light.blue,
+
+    },
     container_TERTIARY:{
 
     },
@@ -57,6 +61,9 @@ const styles = StyleSheet.create({
     },
     text_TERTIARY:{
         color:Colors.light.primary
+    },
+    text_BLUE:{
+        color:'white'
     },
     text_PRIMARY:{
         

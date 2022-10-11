@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, TouchableOpacity,Image} from 'react-native'
 import React from 'react'
-import { selectSavePost } from './savePostSlice'
+import { selectSavePost } from '../../slice/savePostSlice'
 import { useAppSelector } from '../../redux/hook'
 import Post from '../../components/Post'
 

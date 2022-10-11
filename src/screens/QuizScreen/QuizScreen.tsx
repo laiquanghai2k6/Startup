@@ -219,7 +219,9 @@ const QuizScreen = ({ navigation, route }: RootStackScreenProps<"Quiz">) => {
         <CustomBotton text="Continue"
           onPress={onContinue}
         />
-      </Animated.View>}
+      </Animated.View>
+      
+      }
 
     </>
   )

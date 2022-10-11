@@ -14,6 +14,7 @@ const ProgressBar = ({
   return (
     <View style={{backgroundColor:Colors.light.white,height:7}}>
       <View style={{
+        
         backgroundColor:Colors.light.primary,
         width:`${Math.max(5,progress * 100)}%`,
         height:'100%',

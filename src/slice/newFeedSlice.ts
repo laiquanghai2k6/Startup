@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { POSTS } from "../../../assets/data/post"
-import { RootState } from "../../redux/store"
+import { POSTS } from "../../assets/data/post"
+import { RootState } from "../redux/store"
 
 
 const initialState = {
@@ -60,7 +60,7 @@ export const newFeedSlice = createSlice({
                 let commentPost = state.posts[indexPostUpdate].like
                 commentPost +=1
                 state.posts[indexPostUpdate].like = commentPost
-                console.log(commentPost)
+                // console.log(commentPost)
 
             } 
             return state

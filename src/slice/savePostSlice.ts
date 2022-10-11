@@ -1,8 +1,8 @@
-import { savePost } from '../../../assets/data/savePost';
-import { AddNewFeed } from '../NewFeedScreen/newFeedSlice';
+import { savePost } from '../../assets/data/savePost';
+import { AddNewFeed } from './newFeedSlice';
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { POSTS } from "../../../assets/data/post"
-import { RootState } from "../../redux/store"
+import { POSTS } from "../../assets/data/post"
+import { RootState } from "../redux/store"
 
 
 const initialState = {

@@ -32,7 +32,7 @@ const NewFeedHeader = () => {
 
             </TouchableOpacity>
               
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=> navigation.navigate('Messenger')}>
                 <View style={styles.unreadBadge}>
                     <Text style={styles.unreadBadgeText}>11</Text>
                 </View>

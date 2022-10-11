@@ -1,4 +1,4 @@
-import { AddNewFeed } from "../../src/screens/NewFeedScreen/newFeedSlice";
+import { AddNewFeed } from "../../src/slice/newFeedSlice";
 
 
 export const savePost: AddNewFeed[] = [

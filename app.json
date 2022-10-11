@@ -1,5 +1,14 @@
 {
   "expo": {
+    "plugins":[
+      [
+        "expo-image-picker",
+        {
+          "photoPermission": "accessed to photo",
+          "cameraPermission": "accessed to camera"
+        }
+      ]
+    ],
     "name": "LQHStartup",
     "slug": "LQHStartup",
     "version": "1.0.0",
@@ -25,7 +34,15 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },  
+      "package": "com.company.someapp",
+
+      "permissions": [
+
+        "CAMERA",
+         "WRITE_EXTERNAL_STORAGE",
+        "READ_EXTERNAL_STORAGE"
+      ]
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
