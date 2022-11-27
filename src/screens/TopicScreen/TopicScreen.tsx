@@ -13,7 +13,7 @@ import { Analytics, Auth, DataStore } from 'aws-amplify'
 import { Topic, Resource, Exercise, UserTopicProgress } from '../../models'
 import { useModuleContext } from '../../contexts/ModuleContext'
 import { LinearGradient } from 'expo-linear-gradient';
-import TopicHeader from './TopicHeader'
+import TopicHeader from './TopicHeaderOnline'
 const TopicScreen = ({ route, navigation }: RootStackScreenProps<'Topic'>) => {
 
   const { updateTopicProgress } = useModuleContext()

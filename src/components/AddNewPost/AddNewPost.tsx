@@ -1,9 +1,10 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, Text, StyleSheet, Image, TouchableOpacity, Platform } from 'react-native'
+import React, { useEffect } from 'react'
 import FormikPostUploader from './FormikPostUploader'
 import { useNavigation } from '@react-navigation/native'
 
 const AddNewPost = ({navigation}: any) => {
+   
     return (
         <View style={styles.container}>
             <Header navigation={navigation} />
@@ -22,7 +23,7 @@ const Header = ({navigation}: any) => {
                 />
 
             </TouchableOpacity>
-            <Text style={styles.headerText}>New Post</Text>
+            <Text style={styles.headerText}>Đăng Bài Viết Mới</Text>
             <Text></Text>
         </View>
         

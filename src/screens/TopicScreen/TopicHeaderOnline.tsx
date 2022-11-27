@@ -5,6 +5,7 @@ import Colors from '../../constants/Colors'
 import { SCORE } from '../../../assets/data/score'
 import { useAppSelector } from '../../redux/hook'
 import { selectScore } from '../../slice/ScoreSlice'
+import { selectUserName } from '../../slice/setUser'
 
 const gradients = [
   ['#00C9FF', '#92FE9D'],
@@ -27,8 +28,8 @@ const gradients = [
     )
   }
 
-const TopicHeader = () => {
-  const score = useAppSelector(selectScore)
+const TopicHeaderOnline = () => {
+  const user = useAppSelector(selectUserName)
 
   const [gradientIndex,setGradientIndex] = React.useState(0);
   
@@ -45,7 +46,7 @@ const TopicHeader = () => {
         style={styles.backgroundHeader}
 
       >
-        <Text style={styles.titles}>Khóa học</Text>
+        <Text style={styles.titles}>Khóa học Online</Text>
         <View style={{flexDirection:'row',marginRight:20,alignItems:'center'}}>
 
         <Text style={styles.subtitle}>Số điểm hiện tại :</Text>
@@ -53,7 +54,7 @@ const TopicHeader = () => {
       source={{uri:'https://img.icons8.com/external-febrian-hidayat-flat-febrian-hidayat/344/external-trophy-ui-essential-febrian-hidayat-flat-febrian-hidayat.png'}}
       style={{width:30,height:30}}
       />
-      <Text style={{color:'white',fontSize:15,fontWeight:'700'}}>{score.score}</Text>
+      <Text style={{color:'white',fontSize:15,fontWeight:'700'}}>{user.score}</Text>
       </View>
         </LinearGradient>
   )
@@ -97,4 +98,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default TopicHeader;
+export default TopicHeaderOnline;

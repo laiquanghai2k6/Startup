@@ -9,17 +9,17 @@
         }
       ]
     ],
-    "name": "LQHStartup",
-    "slug": "LQHStartup",
+    "name": "Mạng xã hội học tập Neon",
+    "slug": "awesome-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/Neon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/Neon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#334053"
     },
     "updates": {
       "fallbackToCacheTimeout": 0

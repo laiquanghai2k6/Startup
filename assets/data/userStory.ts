@@ -2,18 +2,29 @@ import { ChatType } from '../../src/slice/MessengerSlice';
 import { Image } from 'react-native';
 import { CHAT } from './chats'
 
+export interface PROFILE{
+  trophys:number,
+  name:string,
+  gmail:string,
+  phoneNumber:string,
+  lived:string,
+  school:string,
+  favouriteSubject:string,
+  favourite:string
+}
+
 export interface User{
   user:string,
   image:string,
   chat:ChatType,
+  profile:PROFILE
   
 }
 export const USERS: User[]= [
   {
-    user: 'Tuệ Linh',
+    user: 'Zoro',
     image:
-    'https://scontent.fhan3-4.fna.fbcdn.net/v/t39.30808-1/304864110_778422656815483_1118918160762764963_n.jpg?stp=dst-jpg_p200x200&_nc_cat=104&ccb=1-7&_nc_sid=7206a8&_nc_ohc=4RQSUVcGg5kAX96BXLA&_nc_ht=scontent.fhan3-4.fna&oh=00_AT8Oi4MbGWUx29r-qD1n4y7ERDmy7izy7O-UQgwyr_GiRg&oe=634188C1',
-
+'https://th.bing.com/th/id/R.13efc72a0bfdd9b845e1c2e88b10e49d?rik=VjIyHioonwZR8Q&pid=ImgRaw&r=0',
     chat:{
       num:1,
       mes:[
@@ -24,6 +35,16 @@ export const USERS: User[]= [
       },
     
     ]
+  },
+  profile:{
+    trophys:4302,
+    name:'Zoro Roronoa',
+    gmail:'lqhjlk@gmail.com',
+    phoneNumber:'0393679721',
+    lived:'Tỉnh Hưng Yên,Huyện Khoái Châu,Đồng Tiến',
+    school:'THPT Khoái Châu',
+    favouriteSubject:'Tiếng Anh',
+    favourite:'Nấu ăn',
   }
 
   },
@@ -53,12 +74,16 @@ export const USERS: User[]= [
 
         },
       ]
+    },
+    profile:{
+    
     }
   },
   {
-    user: 'Tlinh',
+    user: 'Zoro2',
     image:
-    'https://scontent.fhan3-3.fna.fbcdn.net/v/t39.30808-6/301931431_778405700150512_7665795004894721373_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=174925&_nc_ohc=J_TeQ_-8LlQAX9WceWe&_nc_oc=AQlYmp-s6DMwsWwTF71ULAbho3iCQFK9Umb1DRL4Tja99pvvuzCL0EShd9YRcPy7kj_DNwBzixgwvBi26o_XlNsi&_nc_ht=scontent.fhan3-3.fna&oh=00_AT8ZmSbYWz3JWUKKF18nw-Q3RC5qoUcTh30-0-gQyOSTSA&oe=6340BEAD',
+'https://th.bing.com/th/id/R.13efc72a0bfdd9b845e1c2e88b10e49d?rik=VjIyHioonwZR8Q&pid=ImgRaw&r=0',
+
           chat:{
         num:3,
         mes:[
@@ -81,6 +106,9 @@ export const USERS: User[]= [
 
         },
       ]
+    },
+    profile:{
+    
     }
   },
   {
@@ -109,6 +137,9 @@ export const USERS: User[]= [
 
         },
       ]
+    },
+    profile:{
+    
     }
   },
   {
@@ -137,6 +168,9 @@ export const USERS: User[]= [
 
         },
       ]
+    },
+    profile:{
+    
     }
   },
 ] 

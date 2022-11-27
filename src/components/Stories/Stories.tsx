@@ -1,17 +1,32 @@
-import { View, Text, ScrollView ,Image,StyleSheet} from 'react-native'
+import { View, Text, ScrollView ,Image,StyleSheet, TouchableOpacity} from 'react-native'
 import React from 'react'
 import { USERS } from '../../../assets/data/userStory'
 import Colors from '../../constants/Colors'
+import { useNavigation } from '@react-navigation/native'
+import axios from 'axios'
+import { useAppSelector } from '../../redux/hook'
+import { selectUserName } from '../../slice/setUser'
+import useApplyHeaderWorkaround from '../../hooks/useApplyHeaderWorkaround'
 
 const Stories = () => {
+    const navigation = useNavigation();
+  
+   
+    const user = useAppSelector(selectUserName)
+    const allUser = user.allUser
+    const Press = (name:string)=> {
+        navigation.navigate("OthersProfileScreen",{name:name})
+    }
+  useApplyHeaderWorkaround(navigation.setOptions)
+    
   return (
     <View style={{marginBottom:13}}>
         <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}        
         >
-            {USERS.map((story,index)=> (
-                
+            {allUser.map((story,index)=> (
+            <TouchableOpacity onPress={()=>{Press(story.id)}}>
              <View key={index}
              style={styles.storyContainer}
              >
@@ -20,15 +35,16 @@ const Stories = () => {
                 style={styles.story}
                 />
                 <Text style={styles.storyName}>
-                {story.user.length > 11
-                ? story.user.slice(0,10).toLowerCase() + '...'
-                : story.user.toLowerCase()
+                {story.name.length > 11
+                ? story.name.slice(0,10)+ '...'
+                : story.name
 
                 }
 
                 </Text>
 
              </View>
+             </TouchableOpacity>
             
             ))}
 

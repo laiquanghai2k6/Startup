@@ -37,15 +37,25 @@ const GroupChatScreen = ({navigation,route}: RootStackScreenProps<'GroupChatScre
         </View>
       ),
       headerRight: () => (
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: 100 }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: 105 }}>
           <TouchableOpacity>
-            <FontAwesome name='video-camera' size={24} color='white' />
+            
+          <Image 
+                  source={{uri:'https://img.icons8.com/nolan/344/1A6DFF/C822FF/zoom.png'}}
+                  style={{width:35,height:35}}
+                  />
           </TouchableOpacity>
           <TouchableOpacity>
-            <Ionicons name='call' size={24} color='white' />
+          <Image 
+                  source={{uri:'https://img.icons8.com/nolan/344/1A6DFF/C822FF/ringer-volume.png'}}
+                  style={{width:35,height:35}}
+                  />
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>navigation.navigate("GroupMemberScreen",{id: selectedGroup.groupName})}>
-          <MaterialCommunityIcons name="human-male-male" size={24} color="white" />
+          <TouchableOpacity onPress={()=>navigation.navigate("GroupMemberScreen",{id: selectedGroup.groupName})} style={{marginLeft:5}}>
+          <Image 
+                  source={{uri:'https://img.icons8.com/nolan/344/1A6DFF/C822FF/conference-call.png'}}
+                  style={{width:35,height:35}}
+                  />
           </TouchableOpacity>
 
         </View>
@@ -224,14 +234,20 @@ const PickImage = async () =>{
                 
                 >
                   
-                  <AntDesign name="camera" size={25} color="#2B68B6" />
+                  <Image 
+                  source={{uri:'https://img.icons8.com/nolan/344/1A6DFF/C822FF/google-images.png'}}
+                  style={{width:30,height:30}}
+                  />
                 </TouchableOpacity>
                 <TouchableOpacity activeOpacity={0.5}
                   onPress={PickImage}
                   style={{paddingRight:10,marginLeft:10}}
 
                 >
-                  <Entypo name="images" size={25} color="#2B68B6" />
+                   <Image 
+                  source={{uri:'https://img.icons8.com/nolan/344/1A6DFF/C822FF/image.png'}}
+                  style={{width:30,height:30}}
+                  />
                 </TouchableOpacity>
               </View>
             <TextInput
@@ -243,7 +259,10 @@ const PickImage = async () =>{
             <TouchableOpacity activeOpacity={0.5}
               onPress={sendMessage}
             >
-              <Ionicons name="send" size={24} color="#2B68B6" />
+                <Image 
+                  source={{uri:'https://img.icons8.com/nolan/344/1A6DFF/C822FF/sent.png'}}
+                  style={{width:35,height:35}}
+                  />
             </TouchableOpacity>
           </View>
         </>
@@ -269,7 +288,7 @@ const styles = StyleSheet.create({
   },
   textInput: {
     bottom: 0,
-    height: 40,
+    height: 35,
     flex: 1,
     marginRight: 15,
     backgroundColor: '#ECECEC',

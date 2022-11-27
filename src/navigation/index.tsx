@@ -8,7 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-import { ColorSchemeName, Pressable } from 'react-native';
+import { ColorSchemeName, Pressable ,Image} from 'react-native';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
@@ -34,13 +34,44 @@ import StudyScreen from '../screens/StudyScreen';
 import QuestionScreen from '../screens/QuestionScreen';
 import PracticesScreen from '../screens/PracticesScreen';
 import AddCourseScreen from '../screens/AddCourseScreen';
+import OthersProfileScreen from '../screens/OthersProfileScreen';
+import StudyOfflineScreen from '../screens/StudyOfflineScreen';
+import PracticesOfflineScreen from '../screens/PracticesOfflineScreen/PracticesOfflineScreen';
+import WebScreen from '../screens/WebScreen';
+import QuestionOfflineScreen from '../screens/QuestionOfflineScreen';
+import QuizEndOfflineScreen from '../screens/QuizEndOfflineScreen';
+import QuestionScreenOffline from '../screens/QuestionOfflineScreen';
+import AuthScreen from '../screens/AuthScreen';
+import AuthScreenSignUp from '../screens/AuthScreenSignUp';
+import { useState,useEffect } from 'react';
+import { useAppSelector } from '../redux/hook';
+import { selectSignIn } from '../slice/setAuth';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
+
+   const signIn = useAppSelector(selectSignIn)
+  console.log("signIn.signin",signIn.signin)
+  const handle = () =>{
+    if(signIn.signin == 0){
+          
+      return (<AuthScreen />)
+    }else if (signIn.signin == 1){
+      return ( <AuthScreenSignUp />)
+    }else {
+      return (<RootNavigator />)
+    }
+  }
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
       theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <RootNavigator />
+       
+        {handle()}
+        {/* <RootNavigator /> */}
+      
+      
+        
+      {/*  */}
     </NavigationContainer>
   );
 }
@@ -52,6 +83,8 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
+  
+
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -146,6 +179,14 @@ function RootNavigator() {
       }}
 
     />
+     <Stack.Screen
+      name="PracticesOfflineScreen"
+      component={PracticesOfflineScreen}
+      options={{
+        title:'Toán Học'
+      }}
+
+    />
  
   
       <Stack.Screen
@@ -164,7 +205,61 @@ function RootNavigator() {
       }}
 
     />
+       <Stack.Screen
+      name="OthersProfileScreen"
+      component={OthersProfileScreen}
+      options={{
+       headerShown:false
 
+      }}
+
+    />
+      <Stack.Screen
+      name="WebScreen"
+      component={WebScreen}
+      options={{
+       headerShown:false
+
+      }}
+
+    />
+ <Stack.Screen
+      name="QuizEndOfflineScreen"
+      component={QuizEndOfflineScreen}
+      options={{
+       headerShown:false
+
+      }}
+
+    />
+    <Stack.Screen
+      name="QuestionOfflineScreen"
+      component={QuestionOfflineScreen}
+      options={{
+       headerShown:false
+
+      }}
+
+    />
+    <Stack.Screen
+      name="AuthScreen"
+      component={AuthScreen}
+      options={{
+       headerShown:false
+
+      }}
+
+    />
+    <Stack.Screen
+      name="AuthScreenSignUp"
+      component={AuthScreenSignUp}
+      options={{
+       headerShown:false
+
+      }}
+
+    />
+   
       
 
     </Stack.Navigator>
@@ -182,7 +277,7 @@ function BottomTabNavigator() {
   
   return (
     <BottomTab.Navigator
-      initialRouteName="Study"
+      initialRouteName="NewFeed"
       screenOptions={{
         tabBarActiveTintColor: Colors.light.tint,
         
@@ -191,30 +286,56 @@ function BottomTabNavigator() {
         name="NewFeed"
         component={NewFeedScreen}
         options={{
-          title: 'New Feed',
+          title: 'Bảng Tin',
           headerShown:false,
-          tabBarIcon: ({ color }) => <Ionicons name="earth" size={24} color='white' />,
+          tabBarIcon: ({ color }) =>
+           <Image 
+          source={{uri:'https://img.icons8.com/nolan/344/earth-planet.png'}}
+          style={{width:32,height:32}}
+          />,
         }}
       />
-          <BottomTab.Screen
+          {/* <BottomTab.Screen
         name="Messenger"
         component={MessengerScreen}
         options={{
-          title: 'Messenger',
+          title: 'Trò Chuyện',
           headerShown:false,
-          tabBarIcon: ({ color }) => <FontAwesome5 name="facebook-messenger" size={24} color="white" />,
+          tabBarIcon: ({ color }) => 
+          <Image 
+          source={{uri:'https://img.icons8.com/nolan/344/topic.png'}}
+          style={{width:32,height:32}}
+          />,
         }}
-      />
+      /> */}
       <BottomTab.Screen
         name="Study"
         component={StudyScreen}
         options={{
           headerShown:false,
+          title:'Học Online',
           
         
-          tabBarIcon: ({ color }) => (<AntDesign name="book" size={24} color='white' />
+          tabBarIcon: ({ color }) => 
+            <Image 
+            source={{uri:'https://img.icons8.com/nolan/344/saving-book.png'}}
+            style={{width:32,height:32}}
+            />,
 
-          ),
+          
+        }}
+      />
+         <BottomTab.Screen
+        name="StudyOffline"
+        component={StudyOfflineScreen}
+        options={{
+          headerShown:false,
+          title: 'Học Offline',
+          tabBarIcon: ({ color }) => 
+          <Image 
+          source={{uri:'https://img.icons8.com/nolan/512/open-book.png'}}
+          style={{width:32,height:32}}
+          />,
         }}
       />
        
@@ -223,10 +344,18 @@ function BottomTabNavigator() {
         component={ProfileScreen}
         options={{
           headerShown:false,
-          title: 'Profile',
-          tabBarIcon: ({ color }) => <FontAwesome5 name="user-alt" size={24} color='white' />,
+          
+          title: 'Cá Nhân',
+          
+          tabBarIcon: ({ color }) => 
+          <Image 
+          source={{uri:'https://img.icons8.com/nolan/344/gender-neutral-user.png'}}
+          style={{width:32,height:32}}
+          />,
         }}
       />
+     
+     
      
     </BottomTab.Navigator>
   );

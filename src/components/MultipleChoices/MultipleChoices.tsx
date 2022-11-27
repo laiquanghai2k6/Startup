@@ -12,9 +12,9 @@ const MultipleChoices = ({
     choice,
     isSelected = false,
     onPress = () => {},
-    ...otherProps
    
 }: MultipleChoicesProps) => {
+
     return (
         <Pressable
         onPress={() => onPress(choice)}
@@ -24,10 +24,9 @@ const MultipleChoices = ({
             {},
         
           ]}
-          {...otherProps}
           >
           <Text style={[styles.text,
-          isSelected ? { fontWeight: 'bold' } :
+          isSelected ? { fontWeight: 'bold',color:'black' } :
             {}
     
           ]}>{choice}</Text>

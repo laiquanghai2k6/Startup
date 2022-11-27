@@ -1,8 +1,8 @@
-import { View, Text, StyleSheet, Pressable, PressableProps } from 'react-native'
+import { View, Text, StyleSheet, Pressable, PressableProps, TouchableOpacityProps, TouchableOpacity } from 'react-native'
 import React from 'react'
 import Colors from '../../constants/Colors';
 
-interface CustomButtonProps extends PressableProps {
+interface CustomButtonProps extends TouchableOpacityProps {
     text: string;
     type?:"PRIMARY" | "SECONDARY" | "TERTIARY" | "BLUE";
 }
@@ -13,7 +13,7 @@ const CustomBotton = ({ style, text,disabled,type="PRIMARY" ,...otherProps}: Cus
     const buttonStyle = styles[`container_${type}`];
     const textStyle = styles[`text_${type}`];
     return (
-        <Pressable 
+        <TouchableOpacity 
         style={[styles.container,
             buttonStyle,
             
@@ -23,7 +23,7 @@ const CustomBotton = ({ style, text,disabled,type="PRIMARY" ,...otherProps}: Cus
         
         >
             <Text style={[styles.text,textStyle]}>{text}</Text>
-        </Pressable>
+        </TouchableOpacity>
     )
 }
 const styles = StyleSheet.create({

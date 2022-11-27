@@ -84,14 +84,14 @@ const AddGroupScreen = () => {
       <View style={{ marginTop: 30 }}>
         <AddGroupHeader navigation={navigation} />
         <TextInput
-          placeholder='Name your Group'
+          placeholder='Đặt Tên Nhóm'
           style={styles.textInput}
           value={groupNameInput}
           onChangeText={(text) => setGroupNameInput(text)}
 
 
         />
-        <CustomButton text="Add Member" type="BLUE"
+        <CustomButton text="Thêm" type="BLUE"
           onPress={() => { addMemberHandler() }} />
 
 

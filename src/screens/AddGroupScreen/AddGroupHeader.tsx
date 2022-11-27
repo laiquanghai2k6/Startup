@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View,Image } from 'react-native'
 import React from 'react'
 import { Ionicons } from '@expo/vector-icons';
 const AddGroupHeader = ({ navigation }: any) => {
@@ -6,10 +6,13 @@ const AddGroupHeader = ({ navigation }: any) => {
     return (
         <View style={ styles.container}>
             <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Ionicons name="arrow-back" size={30} color="white" />
+            <Image 
+                  source={{uri:'https://img.icons8.com/nolan/344/ffffff/arrow-pointing-left.png'}}
+                  style={{width:35,height:35,marginLeft:10}}
+                  />
             </TouchableOpacity>
 
-                <Text style={{color:'white',marginRight:90,fontSize:20,fontWeight:'600'}}>Create your group!</Text>
+                <Text style={{color:'white',marginRight:90,fontSize:20,fontWeight:'600'}}>Tạo Nhóm Của Bạn!</Text>
 
 
         </View>

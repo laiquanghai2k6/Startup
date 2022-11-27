@@ -32,12 +32,24 @@ const SelectUserGroup = (props: SelectUserGroupProps) => {
         </View>
         <Text style={{ color: 'white', marginLeft: 10 }}>{user.user}</Text>
         {user.selected ? (
-          <AntDesign name="checkcircle" size={24} color="white" style={{ marginLeft: 'auto', marginRight: 5 }} />
-        )
+           <Image
+          
+
+           source={{ uri: 'https://img.icons8.com/nolan/344/1A6DFF/C822FF/in-progress.png' }}
+           style={{ marginLeft: 'auto', marginRight: 5,width:30,height:30 }}
+
+
+         />
+          )
           :
           (
 
-            <AntDesign name="checkcircleo" size={24} color="white" style={{ marginLeft: 'auto', marginRight: 5 }} />
+            <Image
+            source={{ uri: 'https://img.icons8.com/nolan/344/1A6DFF/C822FF/circle-thin.png' }}
+            style={{ marginLeft: 'auto', marginRight: 5,width:30,height:30 }}
+
+
+          />
           )
         }
       </View>

@@ -3,7 +3,9 @@ import { USERS } from "./userStory";
 export const POSTS: AddNewFeed[] = [
     {
         imageUrl:
-        'https://scontent.fhan3-4.fna.fbcdn.net/v/t39.30808-1/304864110_778422656815483_1118918160762764963_n.jpg?stp=dst-jpg_p200x200&_nc_cat=104&ccb=1-7&_nc_sid=7206a8&_nc_ohc=4RQSUVcGg5kAX96BXLA&_nc_ht=scontent.fhan3-4.fna&oh=00_AT8Oi4MbGWUx29r-qD1n4y7ERDmy7izy7O-UQgwyr_GiRg&oe=634188C1',
+        'https://i.pinimg.com/originals/ac/3f/72/ac3f727c2812111a957ca7a641fdce82.jpg',
+    
+    
         user:USERS[0].user,
         like:6969,
         caption:'GG 🐧🐧',
@@ -11,17 +13,26 @@ export const POSTS: AddNewFeed[] = [
         comments:[
             {
                 user:USERS[1].user,
-                comment:'Wow! Bro you look gud',
+                comment:'Hàm số lẻ có đồ thị đối xứng qua gốc tọa độ. Bằng cách kiểm tra tính chẵn, lẻ ta có y = cot4x là một hàm số lẻ.',
             },
             {
                 user:USERS[2].user,
                 comment:'This is so cool guys!',
             },
+            {
+                user:USERS[3].user,
+                comment:'This is so cool guys!',
+            },
         ],
-        num:1
+        num:1,
+        linkingCourse:{
+            name:'Toan Hoc by Neon',
+            online:false,
+            subject:'Toán học'
+        }
     },
     {
-        imageUrl:         'https://th.bing.com/th/id/OIP.WqjMFarOqWq8xoY9oaBh9gHaJ4?pid=ImgDet&rs=1',
+        imageUrl:'https://th.bing.com/th/id/OIP.WqjMFarOqWq8xoY9oaBh9gHaJ4?pid=ImgDet&rs=1',
 
         user:USERS[3].user,
         like:9696,
@@ -37,7 +48,12 @@ export const POSTS: AddNewFeed[] = [
                 comment:'?',
             }
         ],
-        num:2
+        num:2,
+        linkingCourse:{
+            name:'Toan Hoc by Neon',
+            online:true,
+            subject:'Toán học'
+        }
     },
     
 ]

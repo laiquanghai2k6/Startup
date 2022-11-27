@@ -32,16 +32,7 @@ const NewFeedHeader = () => {
 
             </TouchableOpacity>
               
-            <TouchableOpacity onPress={()=> navigation.navigate('Messenger')}>
-                <View style={styles.unreadBadge}>
-                    <Text style={styles.unreadBadgeText}>11</Text>
-                </View>
-
-                <Image
-                    style={styles.icon}
-                    source={require('../../../assets/images/NewFeedIconChat.png')}
-                />
-            </TouchableOpacity>
+            
         </View>
 
     </View>

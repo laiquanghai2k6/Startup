@@ -6,6 +6,11 @@ import { RootState } from "../redux/store"
 const initialState = {
     posts: POSTS,
 }
+export interface LinkingCourse{
+    online:boolean,
+    subject:string,
+    name:string
+}
 
 export interface AddNewFeed {
     imageUrl: string,
@@ -14,7 +19,8 @@ export interface AddNewFeed {
     caption: string,
     profilePicture: string, 
     comments: Comment[],
-    num: number
+    num: number,
+    linkingCourse:LinkingCourse,
 }
 
 export interface Comment {
@@ -28,7 +34,8 @@ export interface AddComment {
 }
 export interface AddLike {
     like: number,
-    idPost: number
+    idPost: number,
+    amount:number
 }
 
 export const newFeedSlice = createSlice({
@@ -47,10 +54,8 @@ export const newFeedSlice = createSlice({
                 const commentPost = [...state.posts[indexPostUpdate].comments]
                 commentPost.push(action.payload.comment)
                 state.posts[indexPostUpdate].comments = commentPost
-            // console.log("State Change", state)
 
             } 
-            // console.log("State", state)
             return state
         },
         like: (state, action: PayloadAction<AddLike>) => {
@@ -58,7 +63,7 @@ export const newFeedSlice = createSlice({
             const indexPostUpdate = state.posts.findIndex(post => post.num === action.payload.idPost);
             if (indexPostUpdate !== -1) {
                 let commentPost = state.posts[indexPostUpdate].like
-                commentPost +=1
+                commentPost += action.payload.amount
                 state.posts[indexPostUpdate].like = commentPost
                 // console.log(commentPost)
 

@@ -16,9 +16,12 @@ const MessengerHeader = () => {
                 />
             </TouchableOpacity>
             <Text style={{ color: 'white', fontSize: 20, fontWeight: '600', right: 25, top: 25 }}>Chat</Text>
-            <TouchableOpacity onPress={()=>navigation.navigate('AddGroupScreen')}>
-
-                <AntDesign name="plus" size={24} color="white" style={{ marginTop: 40 }} />
+            <TouchableOpacity onPress={()=>navigation.navigate('AddGroupScreen')} style={{alignItems:'center'}}>
+            <Image 
+                source={{uri:'https://img.icons8.com/android/344/ffffff/plus.png'}}
+                style={{width:26,height:26,top:20}}
+               
+                />
             </TouchableOpacity>
         </View>
     )
