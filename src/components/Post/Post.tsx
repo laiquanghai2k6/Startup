@@ -47,10 +47,13 @@ const postFooterIcons = [
 //        "postId": 1 
 //     } 
 // }
+const ngrok = 'https://5351-2001-ee0-481f-3b0-880c-fc56-1e9c-a0f9.ap.ngrok.io'
 
 
 const Post = (posts: any) => {
 
+    // console.log(posts.post)
+    // console.log(1)
 
     const comment = useAppSelector(selectPost)
     const commentId = comment.comment.filter((c) => c.postId == posts.post.postId)
@@ -82,11 +85,15 @@ const Post = (posts: any) => {
 const PostHeader = ({ post }: any) => {
         const user = useAppSelector(selectUserName)
         // user.allUser.map((u)=>console.log(u.tai_khoan))
-        const userImage = user.allUser.find((u)=>{
-           return u.tai_khoan == post.created
-        }
+        // console.log(user.allUser[0])
+        // console.log("postzz",post)
+        const userImage = user.allUser.find((u)=>
+          u.tai_khoan == post.created
+        
         
     )
+    // console.log("userImage",userImage)
+
     // console.log("end")
     // console.log("userImage",userImage)
     return (
@@ -94,7 +101,7 @@ const PostHeader = ({ post }: any) => {
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Image
 
-                    source={{ uri: userImage.image }}
+                    source={{ uri: ngrok+'/i/'+userImage.image }}
                     style={styles.story}
                 />
                 <Text style={styles.nameUserPost}>
@@ -110,14 +117,18 @@ const PostHeader = ({ post }: any) => {
 
 const PostImage = ({ post }: any) => {
     // console.log(post.image)
+    // console.log(ngrok+'/i/'+ post.image )
     return (
         <View style={{
             width: '100%',
-            height: post.image != "data:image/jpeg;base64," ? 350: 10,
+            height: post.image != "" ? 350: 10,
         }}>
-            <Image source={{ uri: post.image }}
+            <Image source={{ 
+                // uri: post.image 
+                uri:ngrok+'/i/'+ post.image 
+            }}
 
-                style={{ height: '100%', resizeMode: 'cover' }}
+                style={{ height: '100%', resizeMode: 'stretch'  }}
             />
         </View>
     )
@@ -193,10 +204,11 @@ const IconSave = ({ post }: any) => {
 const IconLike = ({ imgStyle, imgUrl, post,num }: any) => {
     const dispatch = useAppDispatch()
     const posts = useAppSelector(selectNewFeed)
+    // console.log(post)
     const [liked, setLiked] = useState(false)
     const bruh = () => {
       
-        const urlUpdate = 'https://2248-2001-ee0-4818-c90-89bd-1cda-528b-8b79.ap.ngrok.io/updateLike'
+        const urlUpdate = ngrok+'/updateLike'
      
         dispatch(SetUpdatePostAction.setupdatelikes(1))
 
@@ -268,7 +280,7 @@ const Comments = ({ post, num, commentId }: any) => {
     const updatedComment = useAppSelector(selectPost)
     const sendComment = () => {
         console.log('a')
-        const urlUpdate = 'https://2248-2001-ee0-4818-c90-89bd-1cda-528b-8b79.ap.ngrok.io/updateComment'
+        const urlUpdate = ngrok+'/updateComment'
         const data = {
             content: text,
             userId: userIds.user,

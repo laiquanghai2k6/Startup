@@ -62,6 +62,7 @@ export type RootTabParamList = {
   Study:undefined;
   StudyOffline:undefined;
   Auth:undefined;
+  Ranking:undefined;
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> = CompositeScreenProps<

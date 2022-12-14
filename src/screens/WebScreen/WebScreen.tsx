@@ -13,7 +13,7 @@ const WebScreen = ({ route, navigation }: RootStackScreenProps<'WebScreen'>) => 
             <ScrollView style={{ marginTop: 40, marginLeft: 20 }}>
                 {WEB.map((web, index) => (
                     <View>
-                        <Text style={{ color: 'white', fontWeight: '800' }}>{web.title}:</Text>
+                        <Text style={{ color: 'yellow', fontWeight: '800' }}>{web.title}:</Text>
                         <TouchableOpacity onPress={() => { Linking.openURL(web.link)}}>
                             <Text style={{ color: 'white', fontWeight: '800', textDecorationLine: 'underline' }}>{web.link}</Text>
                         </TouchableOpacity>

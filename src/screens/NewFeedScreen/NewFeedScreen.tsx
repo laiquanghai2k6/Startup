@@ -15,10 +15,13 @@ import { selectUpdatePost } from '../../slice/updatePost'
 import useApplyHeaderWorkaround from '../../hooks/useApplyHeaderWorkaround'
 import { SetStudyAction } from '../../slice/setStudy'
 
+const ngrok = 'https://5351-2001-ee0-481f-3b0-880c-fc56-1e9c-a0f9.ap.ngrok.io'
 
 const NewFeedScreen =  ({navigation}: any) => {
   const [refreshing, setRefreshing] = useState(false);
   const post = useAppSelector(selectPost)
+  // console.log("post.post",post.post)
+  
   const postUpdate = useAppSelector(selectUpdatePost)
   const dispatch = useAppDispatch()
   useApplyHeaderWorkaround(navigation.setOptions)
@@ -31,10 +34,10 @@ const NewFeedScreen =  ({navigation}: any) => {
     },2000)
   }, []);
   const fetch = async () => {
-
-    var urlPost = 'https://2248-2001-ee0-4818-c90-89bd-1cda-528b-8b79.ap.ngrok.io/post'
-    var urlComment = 'https://2248-2001-ee0-4818-c90-89bd-1cda-528b-8b79.ap.ngrok.io/post/comment'
-    var urlSubject = 'https://2248-2001-ee0-4818-c90-89bd-1cda-528b-8b79.ap.ngrok.io/subject'
+    
+    var urlPost = ngrok+'/post'
+    var urlComment = ngrok+'/post/comment'
+    var urlSubject = ngrok+'/subject'
     let a = []
     let b = []
     let c = []
@@ -59,7 +62,7 @@ const NewFeedScreen =  ({navigation}: any) => {
 
     await axios.get(urlComment).then((Data) => {
       Data.data.map((data) => {
-        console.log("DATA:",data)
+        // console.log("DATA:",data)
         b.push(data)
 
       })
@@ -91,9 +94,15 @@ const NewFeedScreen =  ({navigation}: any) => {
        
        {
         
-        post.post.map((data,i)=>(
-          <Post post={data} key={i}/>
-        ))
+        post.post.map((data,i)=>
+          // console.log("data",data)
+        
+            (
+            <Post post={data} key={i}/>
+            // <Text style={{color:'white'}}>32</Text>
+            )
+        
+        )
         
         }
 

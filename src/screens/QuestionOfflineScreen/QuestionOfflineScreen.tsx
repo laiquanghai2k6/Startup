@@ -78,7 +78,7 @@ const QuestionOfflineScreen = ({ route, navigation }: RootStackScreenProps<'Ques
       }
     
     
-    console.log("selectedAnswers",selectedAnswers);
+    // console.log("selectedAnswers",selectedAnswers);
 
   }
   const onContinue = () =>{
@@ -108,16 +108,7 @@ const QuestionOfflineScreen = ({ route, navigation }: RootStackScreenProps<'Ques
         <View style={styles.iconsContainer}>
         
                        
-            <TouchableOpacity onPress={()=> navigation.navigate('Messenger')}>
-                <View style={styles.unreadBadge}>
-                    <Text style={styles.unreadBadgeText}>6</Text>
-                </View>
-
-                <Image
-                    style={styles.icon}
-                    source={require('../../../assets/images/NewFeedIconChat.png')}
-                />
-            </TouchableOpacity>
+            
         </View>
 
     </View>
@@ -144,7 +135,7 @@ const QuestionOfflineScreen = ({ route, navigation }: RootStackScreenProps<'Ques
                     ),console.log("selectedAnswers",selectedAnswers))}
                 </View>
             )}
-              <CustomBotton text="Submit"
+              <CustomBotton text="Đồng Ý"
           disabled={isButtonDisabled}
           onPress={onSubmit} />
            
@@ -164,7 +155,7 @@ const QuestionOfflineScreen = ({ route, navigation }: RootStackScreenProps<'Ques
                 />
                 <Text style={{fontWeight:'800'}} >+20</Text>
               </View>
-              <CustomBotton text="Continue"
+              <CustomBotton text="Tiếp Tục"
                 onPress={onContinue}
               />
             </Animated.View>}
@@ -182,7 +173,7 @@ const QuestionOfflineScreen = ({ route, navigation }: RootStackScreenProps<'Ques
                 />
                 <Text style={{fontWeight:'800'}} >+0</Text>
               </View>
-            <CustomBotton text="Continue"
+            <CustomBotton text="Tiếp Tục"
               onPress={onContinue}
             />
           </Animated.View>

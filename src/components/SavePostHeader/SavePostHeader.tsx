@@ -15,17 +15,7 @@ const SavePostHeader = () => {
         />
        </TouchableOpacity>  
                   
-              
-            <TouchableOpacity>
-                <View style={styles.unreadBadge}>
-                    <Text style={styles.unreadBadgeText}>11</Text>
-                </View>
-
-                <Image
-                    style={styles.icon}
-                    source={require('../../../assets/images/NewFeedIconChat.png')}
-                />
-            </TouchableOpacity>
+        
         </View>
 
    

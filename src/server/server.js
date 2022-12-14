@@ -4,21 +4,55 @@ var mysql = require('mysql');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose')
 var multer = require('multer')
-// app.set("view engine","ejs")
+var path = require('path')
+// const {uploadFile} = require('../../s3')
 var ImageModel = require('./image-model')
-app.use(bodyParser.json({type:'application/json',limit:'7000kb'}));
-app.use(bodyParser.urlencoded({extended:true}))
+// const uploads = multer({dest:'uploadss/'})
+const u = 'http://localhost:3000'
+
+// app.post('/images',uploads.single('image'),(req,res)=>{
+//     const file = req.file
+//     console.log(file)
+//     res.send('nice')
+// })
+// app.use(express.static(__dirname,'../../'))
+// app.use(cors({
+//     origin:[corsOrigin],
+//     method:['GET','POST'],
+//     credentials:true
+// }))
+
+// app.post('/image',(req,res)=>{
+//     console.log('got a post request')
+//     res.send('Got a POST request')
+// })
+
+
+
+app.use(bodyParser.json({type:'application/json',limit:'100000kb'}));
+app.use(bodyParser.urlencoded({extended:false}))
 const Storage = multer.diskStorage({
     destination: "uploads",
     filename:(req,file,cb)=>{
         cb(null,file.originalname)
     }
 })
+
 const upload = multer({
     storage:Storage
 }).single('testImage')
-app.post('/upload',(req,res)=>{
-    upload(req,res,(err)=>{
+app.get('/i/:nameImg',(req,res)=>{
+    const _nameImg = req.params.nameImg
+    let begin = '../../uploads/' + _nameImg
+    console.log("begin",begin)
+    var t = '../../uploads/'
+    var s = path.join(__dirname, '../../uploads/'+_nameImg)
+    // console.log(s)
+    res.sendFile(s)
+})
+
+app.post('/upload', async (req,res)=>{
+    upload(req,res,async (err)=>{
         if(err) {console.log(err)}
         else{
             const newImage = new ImageModel({
@@ -27,10 +61,12 @@ app.post('/upload',(req,res)=>{
                     contentType:'image/jpg'
                 }
             })
-            
+            console.log("req.file",req.file)
+            // const result =  await uploadFile(req.file)
+            // console.log('result',result)
 
             newImage.save()
-            .then(()=>res.send('successfully uploaded'))
+            .then(()=>res.send('successfully aed'))
             .catch(err=>console.log(err))
         }
     })
@@ -150,12 +186,12 @@ app.post('/createPost',(req,res)=>{
 app.post('/createQuiz',(req,res)=>{
     var data = {
         quizImage:req.body.quizImage,
-        quizText:req.body.quizText,
         a1:req.body.a1,
         a2:req.body.a2,
         a3:req.body.a3,
         a4:req.body.a4,
         correctA:req.body.correctA,
+        quizText:req.body.quizText,
         courseId:req.body.courseId,
     }
     var sql = 'insert into quiz set ?';
@@ -267,6 +303,7 @@ app.post("/updateImageProfile",(req,res)=>{
     })
 })
 
+
 app.get("/subject",(req,res)=>{
     connectionStudy.query('select * from subject',(e,rows,field)=>{
         if(e) console.log(e)
@@ -276,6 +313,7 @@ app.get("/subject",(req,res)=>{
         }
     })
 })
+
 
 app.get("/course",(req,res)=>{
     connectionStudy.query('select * from course',(e,rows,field)=>{
@@ -292,6 +330,15 @@ app.get("/quiz",(req,res)=>{
         if(e) console.log(e)
         else {
             console.log("quizAccess")
+            res.send(rows)
+        }
+    })
+})
+app.get("/sortscore",(req,res)=>{
+    connectionAuth.query('SELECT * FROM userauth ORDER BY score DESC',(e,rows,field)=>{
+        if(e) console.log(e)
+        else {
+            console.log("sortsuccess")
             res.send(rows)
         }
     })
@@ -327,4 +374,6 @@ app.post("/updateScore",(req,res)=>{
         }
     })
 })
+
+
 

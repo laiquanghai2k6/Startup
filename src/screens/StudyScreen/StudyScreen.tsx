@@ -13,7 +13,7 @@ import { selectStudy, SetStudyAction } from '../../slice/setStudy'
 
  
 
-
+const ngrok = 'https://5351-2001-ee0-481f-3b0-880c-fc56-1e9c-a0f9.ap.ngrok.io'
 const StudyScreen = () => {
   const navigation = useNavigation()
   const [refreshing, setRefreshing] = useState(false);
@@ -28,8 +28,8 @@ const StudyScreen = () => {
         let d = []
         let e = []
 
-        var urlCourse = 'https://2248-2001-ee0-4818-c90-89bd-1cda-528b-8b79.ap.ngrok.io/course'
-        var urlQuiz =   'https://2248-2001-ee0-4818-c90-89bd-1cda-528b-8b79.ap.ngrok.io/quiz'
+        var urlCourse = ngrok+'/course'
+        var urlQuiz =   ngrok+'/quiz'
 
 
 
@@ -51,7 +51,7 @@ const StudyScreen = () => {
         axios.get(urlQuiz).then((Data) => {
             Data.data.map((data) => {
                 e.push(data)
-                console.log("DATA:",data)
+                // console.log("DATA:",data)
 
             })
 
@@ -64,20 +64,23 @@ const StudyScreen = () => {
     const study = useAppSelector(selectStudy)
    
     
-    
+    console.log(study.subject)
   
   return (
+   
 <View style={{flex:1}}>
-    <ScrollView 
-    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-    >
-    <ImageBackground source={{uri:'https://images.pexels.com/photos/1907786/pexels-photo-1907786.jpeg?cs=srgb&dl=pexels-ricardo-esquivel-1907786.jpg&fm=jpg&_gl=1*1fhs0qo*_ga*MzY3MDY3OTEuMTY2NjM2Mjc4Nw..*_ga_8JE65Q40S6*MTY2ODIyNTQ0Ny4yLjEuMTY2ODIyNTc2Ni4wLjAuMA..'}}
+
+      {/* https://images.pexels.com/photos/1907786/pexels-photo-1907786.jpeg?cs=srgb&dl=pexels-ricardo-esquivel-1907786.jpg&fm=jpg&_gl=1*1fhs0qo*_ga*MzY3MDY3OTEuMTY2NjM2Mjc4Nw..*_ga_8JE65Q40S6*MTY2ODIyNTQ0Ny4yLjEuMTY2ODIyNTc2Ni4wLjAuMA.. */}
+    <ImageBackground source={{uri:'https://i.ibb.co/frj1LJJ/pexels-ricardo-esquivel-1907786.jpg'}}
     resizeMode='stretch'
     >
 
          <TopicHeaderOnline
 
         />
+         <ScrollView 
+    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+    >
     {study.subject.map((subject,index)=>(
       <TouchableOpacity onPress={()=>{
         navigation.navigate("PracticesScreen",{id:subject.subjectId})
@@ -91,9 +94,10 @@ const StudyScreen = () => {
       </View>
       </TouchableOpacity>
     ))}
+    </ScrollView>
+
     </ImageBackground>
     
-    </ScrollView>
     </View>
   )
 }

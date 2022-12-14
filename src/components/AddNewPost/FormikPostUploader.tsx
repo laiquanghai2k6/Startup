@@ -33,6 +33,8 @@ const countries = [
   }
 ]
 
+const ngrok = 'https://5351-2001-ee0-481f-3b0-880c-fc56-1e9c-a0f9.ap.ngrok.io'
+
 
 
 const FormikPostUploader = ({ navigation }: any) => {
@@ -61,19 +63,46 @@ const FormikPostUploader = ({ navigation }: any) => {
 
   }, [])
   const PickImage = async () => {
+
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [6, 4],
+      aspect: [1, 1],
       quality: 1,
-      base64: true
+      // base64: true
     })
     if (!result.cancelled) {
       setImage(result.uri)
-      setBase64(result.base64)
+      const formData = new FormData()
+
+      const Name = result.uri.slice(60)
+      formData.append("testImage", {
+        uri: result.uri,
+        name: Name,
+        fileName: 'image',
+        type: 'image/png'
+
+      })
+      await axios({
+        method: "post",
+        url: ngrok + "/upload",
+        data: formData,
+        headers: {
+
+          'Content-Type': 'multipart/form-data',
+          'Authorization': 'Basic YnJva2VyOmJyb2tlcl8xMjM='
+
+        }
+      }).then(function (response) {
+        console.log("response :", response);
+      })
+        .catch(function (error) {
+          console.log(error);
+        })
+
     }
   }
-  
+
   // const PickImage = ()=>{
   //   ImagePicker.openPicker({
   //     width:300,
@@ -86,8 +115,8 @@ const FormikPostUploader = ({ navigation }: any) => {
 
   const handleSubmit = () => {
 
-    const url = 'https://2248-2001-ee0-4818-c90-89bd-1cda-528b-8b79.ap.ngrok.io/createPost'
-    const s = "data:image/jpeg;base64," + base64
+    const url = ngrok + '/createPost'
+    const s = image.slice(60)
     const dp: UPDATEPOST = {
       created: user.user,
       caption: title,
@@ -117,7 +146,7 @@ const FormikPostUploader = ({ navigation }: any) => {
     );
     navigations.navigate("Root")
   }
-  
+
   return (
     <>
 
@@ -128,7 +157,7 @@ const FormikPostUploader = ({ navigation }: any) => {
 
 
       }}>
-        
+
         <TouchableOpacity onPress={PickImage} disabled={image != ""}>
           <Image
             source={{ uri: image ? image : PLACEHOLDER_IMG }}
@@ -157,19 +186,19 @@ const FormikPostUploader = ({ navigation }: any) => {
           </KeyboardAvoidingView>
         </View>
       </View>
-     
+
       <View style={{
         borderBottomColor: '#eee',
         borderBottomWidth: 1,
 
       }}></View>
 
-    
+
       <Button
 
         onPress={handleSubmit}
         title='Chia Sẻ'
-        disabled={(title == "" ) ? true : false}
+        disabled={(title == "") ? true : false}
 
       />
 

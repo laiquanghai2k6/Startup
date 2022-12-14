@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, KeyboardAvoidingView, Platform, Alert } from 'react-native'
+import { StyleSheet, Text, View, Image, KeyboardAvoidingView, Platform, Alert, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import {
     StyledContainer,
@@ -34,43 +34,58 @@ import axios from 'axios'
 import { REALUSER, SetUserAction } from '../../slice/setUser'
 import { selectPost, SetPostAction } from '../../slice/setPost'
 import { SetStudyAction } from '../../slice/setStudy'
+import * as ImagePicker from 'expo-image-picker'
 
+const ngrok = 'https://5351-2001-ee0-481f-3b0-880c-fc56-1e9c-a0f9.ap.ngrok.io'
 
 const fetch = async () => {
     const dispatch = useAppDispatch()
-    var urlPost = 'https://2248-2001-ee0-4818-c90-89bd-1cda-528b-8b79.ap.ngrok.io/post'
-    var urlComment = 'https://2248-2001-ee0-4818-c90-89bd-1cda-528b-8b79.ap.ngrok.io/post/comment'
-    var urlSubject = 'https://2248-2001-ee0-4818-c90-89bd-1cda-528b-8b79.ap.ngrok.io/subject'
-    var urlCourse = 'https://2248-2001-ee0-4818-c90-89bd-1cda-528b-8b79.ap.ngrok.io/course'
-    var urlQuiz = 'https://2248-2001-ee0-4818-c90-89bd-1cda-528b-8b79.ap.ngrok.io/quiz'
+    var urlPost = ngrok + '/post'
+    var urlComment = ngrok + '/post/comment'
+    var urlSubject = ngrok + '/subject'
+    var urlCourse = ngrok + '/course'
+    var urlQuiz = ngrok + '/quiz'
+    const urlSort = ngrok + '/sortscore'
+
     let a = []
     let b = []
     let c = []
     let d = []
     let e = []
+    let f = []
+
+    axios.get(urlSort).then((Data) => {
+        Data.data.map((data) => {
+            f.push(data)
+        })
+        dispatch(SetUserAction.setsortuser(f))
+
+
+    }).catch((e) => console.log("error sort"))
+
     await axios.get(urlPost).then((Data) => {
         Data.data.map((data) => {
             a.push(data)
         })
+        console.log(a)
         dispatch(SetPostAction.setpost(a))
     }).catch(e => console.log(4))
 
     await axios.get(urlComment).then((Data) => {
         Data.data.map((data) => {
-            console.log('auth cmt data')
             b.push(data)
         })
         dispatch(SetPostAction.setcomment(b))
     }).catch((e) => console.log("error cmt 1"))
 
-   
+
     await axios.get(urlSubject).then((Data) => {
         Data.data.map((data) => {
             c.push(data)
         })
         dispatch(SetStudyAction.setStudy(c))
 
-    }).catch(e => console.log(4))
+    }).catch(e => console.log('error study'))
 
     await axios.get(urlCourse).then((Data) => {
         Data.data.map((data) => {
@@ -84,12 +99,12 @@ const fetch = async () => {
         Data.data.map((data) => {
             e.push(data)
         })
-      
+
         dispatch(SetStudyAction.setQuiz(e))
 
     }).catch(e => console.log(4))
 
-
+   
 
 }
 const { darkLight } = Colors
@@ -97,7 +112,10 @@ const AuthScreen = () => {
     const dispatch = useAppDispatch()
 
     const [hidePassword, setHidePassword] = useState(true)
+    const [img, setImg] = useState("")
     const [a, setA] = useState(0)
+    const imgs = 'dfe8-8218-456c-8489-2bd937b478e2.jpeg'
+     
     // const [image,setImage] = useState("")
     // const [score,setScore] = useState(0)
 
@@ -108,11 +126,24 @@ const AuthScreen = () => {
     // const [subject,setSubject] = useState("")
 
     let id: string, signIn: boolean, score: number, name: string, phone: string, school: string, live: string, subject: string, image: string
-
+    // const posts = useAppSelector(selectPost)
+    // console.log("post.post",posts.post)
     const SignUp = () => {
-        console.log("ss")
+        // console.log("ss")
         dispatch(SetAuthAction.setsignin(1))
+        
+        // Alert.alert(
+        //     'Sever Văn Chấn hiện tại đang mất điện',
+        //     'Sẽ khắc phục sau 20h 5/12/2022',
+        //     [
+        //         {
+        //             text: 'Tiếp Tục',
+        //             onPress: () => { }
 
+        //         },
+
+        //     ]
+        // );
     }
     // 
 
@@ -124,6 +155,55 @@ const AuthScreen = () => {
         setA(a + 1)
     }
 
+    const PickImage = async () => {
+        const formData = new FormData()
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 1,
+            //   base64: true
+        })
+        
+        if (!result.cancelled) {
+           
+            const Name = result.uri.slice(60)
+            setImg(result.uri)
+            formData.append("testImage", {
+                uri:result.uri,
+                name:Name,
+                fileName:'image',
+                type:'image/png'
+              
+            })
+            // formData.append('testImage', result.uri, 'ss');
+            // formData.append("testImage",result.uri)
+         
+            await axios({
+                method: "post",
+                url: ngrok+"/upload",
+                data: formData,
+                headers: {
+        
+                    'Content-Type' : 'multipart/form-data',
+                    'Authorization':'Basic YnJva2VyOmJyb2tlcl8xMjM='
+                    
+                }
+            })   .then(function (response) {
+                console.log("response :", response);
+       })
+       .catch(function (error) {
+                console.log(error);
+       })
+       
+           
+         
+          
+         
+}
+
+    }
+   
 
     return (
         <StyledContainer>
@@ -140,15 +220,16 @@ const AuthScreen = () => {
                     <SubTitle>Đăng Nhập Tài Khoản</SubTitle>
                     <Formik
                         initialValues={{ email: '', password: '' }}
-                        onSubmit={(values) => {
-                            // console.log(values)
-                            // dispatch(SetAuthAction.setsignin(2))
+                        onSubmit={async (values) => {
 
-                            var url = 'https://2248-2001-ee0-4818-c90-89bd-1cda-528b-8b79.ap.ngrok.io/auth'
-                        
-                            axios.get(url)
+
+                            var url = ngrok + '/auth'
+                      
+
+                           await axios.get(url)
                                 .then((Data) => {
                                     let o = []
+                               
                                     Data.data.map((data) => {
                                         if (values.email == data.tai_khoan && values.password == data.mat_khau) {
                                             signIn = true
@@ -164,12 +245,13 @@ const AuthScreen = () => {
 
 
                                         }
-                                            o.push(data)
-                                        
-                                        // console.log(data.mat_khau)
+                                        o.push(data)
+                                        // console.log('dataall',data)
+                                       
                                     })
+                                    // console.log("alluser:",o)
                                     dispatch(SetUserAction.setalluser(o))
-
+                                    
                                     if (signIn) {
                                         const a: REALUSER = {
                                             user: values.email,
@@ -204,6 +286,8 @@ const AuthScreen = () => {
                                 }).catch((e) => {
                                     console.log(3)
                                 })
+                            dispatch(SetAuthAction.setsignin(2))
+
 
                         }}
                     >
@@ -211,7 +295,7 @@ const AuthScreen = () => {
                         (
                             <StyledFormArea>
                                 <MyTextInput
-                                    label="Email Address"
+                                    label="Tài Khoản Email"
                                     img={mail}
                                     placeholder="yortvrluer@gmail.com"
                                     placeholderTextColor={darkLight}
@@ -222,7 +306,7 @@ const AuthScreen = () => {
 
                                 />
                                 <MyTextInput
-                                    label="Password"
+                                    label="Mật Khẩu"
                                     img={lock}
                                     placeholder="**********"
                                     placeholderTextColor={darkLight}
@@ -243,6 +327,19 @@ const AuthScreen = () => {
                                 <StyledButton signup={true} onPress={SignUp}>
                                     <ButtonText >Đăng Ký</ButtonText>
                                 </StyledButton>
+                                {/* <TouchableOpacity
+                                    onPress={PickImage}
+                                >
+                                    <Image
+                                        source={{ 
+                                        //     uri: 'https://40ed-2001-ee0-481f-3b0-50f7-fd3c-ea65-38c7.ap.ngrok.io/i/'+imgs
+                                        //     // 'http://localhost:3000/i'}}
+                                          
+                                        // 
+                                            uri: img == "" ? 'https://th.bing.com/th/id/OIP.QrR56voakzVibJnCtTWw7gHaEK?pid=ImgDet&rs=1' : img }}
+                                        style={{ width: 80, height: 80 }}
+                                    />
+                                </TouchableOpacity> */}
 
                             </StyledFormArea>
 

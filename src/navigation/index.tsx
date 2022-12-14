@@ -46,6 +46,7 @@ import AuthScreenSignUp from '../screens/AuthScreenSignUp';
 import { useState,useEffect } from 'react';
 import { useAppSelector } from '../redux/hook';
 import { selectSignIn } from '../slice/setAuth';
+import RankingScreen from '../screens/RankingScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
 
@@ -339,6 +340,21 @@ function BottomTabNavigator() {
         }}
       />
        
+       <BottomTab.Screen
+        name="Ranking"
+        component={RankingScreen}
+        options={{
+          headerShown:false,
+          
+          title: 'Xếp Hạng',
+          
+          tabBarIcon: ({ color }) => 
+          <Image 
+          source={{uri:'https://img.icons8.com/nolan/512/prize.png'}}
+          style={{width:32,height:32}}
+          />,
+        }}
+      />
       <BottomTab.Screen
         name="Profile"
         component={ProfileScreen}
@@ -354,6 +370,7 @@ function BottomTabNavigator() {
           />,
         }}
       />
+     
      
      
      

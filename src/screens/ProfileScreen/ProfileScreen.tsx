@@ -18,6 +18,7 @@ import { selectUserName } from '../../slice/setUser'
 import axios from 'axios'
 import * as ImagePicker from 'expo-image-picker'
 
+const ngrok = 'https://5351-2001-ee0-481f-3b0-880c-fc56-1e9c-a0f9.ap.ngrok.io'
 const ProfileScreen = () => {
   const user = useAppSelector(selectUserName)
 
@@ -43,15 +44,40 @@ const ProfileScreen = () => {
       base64: true
     })
     if (!result.cancelled) {
-      const s = "data:image/jpeg;base64,"
+      
       setImage(result.uri)
-     const url =  'https://2248-2001-ee0-4818-c90-89bd-1cda-528b-8b79.ap.ngrok.io/updateImageProfile'
-      axios.post(url, {     
-        image: s+result.base64,
+     const url =  ngrok+'/updateImageProfile'
+       axios.post(url, {     
+        image: result.uri.slice(60),
         id:user.id,
       }).then((r) => console.log('uploaded'))
         .catch((e) => console.log(e))
-      // setBase64(result.base64)
+
+        const formData = new FormData()
+        formData.append("testImage", {
+          uri: result.uri,
+          name: result.uri.slice(60),
+          fileName: 'image',
+          type: 'image/png'
+  
+        })
+        axios({
+          method: "post",
+          url: ngrok + "/upload",
+          data: formData,
+          headers: {
+  
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Basic YnJva2VyOmJyb2tlcl8xMjM='
+  
+          }
+        }).then(function (response) {
+          console.log("response :", response);
+        })
+          .catch(function (error) {
+            console.log(error);
+          })
+
     }
   }
   return (
@@ -61,7 +87,7 @@ const ProfileScreen = () => {
       style={styles.container}>
       <Text style={{ color: 'white', marginTop: 20, fontSize: 20, fontWeight: '900' }}>Trang cá nhân </Text>
       <TouchableOpacity onPress={ImageProfile}>
-      <Image source={{ uri: image }} resizeMode="contain" style={styles.avatar} />
+      <Image source={{ uri: ngrok+'/i/'+image }}  style={styles.avatar} />
       </TouchableOpacity>
 
       <Text style={styles.name}>{user.user}</Text>
@@ -235,7 +261,7 @@ const ProfileScreen = () => {
           <CustomButton text="Chỉnh Sửa" type="BLUE"
             onPress={() => {
               if (change) {
-                const urlUpdate = 'https://2248-2001-ee0-4818-c90-89bd-1cda-528b-8b79.ap.ngrok.io/updateProfile'
+                const urlUpdate = ngrok+'/updateProfile'
                 axios.post(urlUpdate, {
                   name:name,
                   phone:sdt,

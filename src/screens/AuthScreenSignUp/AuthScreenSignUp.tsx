@@ -32,14 +32,14 @@ import { useAppDispatch } from '../../redux/hook'
 import { SetAuthAction } from '../../slice/setAuth'
 import axios from 'axios'
 
-
+const ngrok = 'https://5351-2001-ee0-481f-3b0-880c-fc56-1e9c-a0f9.ap.ngrok.io'
 const { darkLight } = Colors
 const AuthScreenSignUp =   () => {
 
     const [hidePassword, setHidePassword] = useState(true)
     const dispatch = useAppDispatch()
-    var urlData = 'https://2248-2001-ee0-4818-c90-89bd-1cda-528b-8b79.ap.ngrok.io/data'
-    var urlGet =  'https://2248-2001-ee0-4818-c90-89bd-1cda-528b-8b79.ap.ngrok.io/auth'
+    var urlGet = ngrok+'/auth'
+    var urlData =  ngrok+'/data'
     let a = []
  
       
@@ -189,7 +189,7 @@ const AuthScreenSignUp =   () => {
 
                                         <ExtraView>
                                             <ExtraText>Bạn đã có tài khoản rồi? </ExtraText>
-                                            <TextLink onPress={handleSubmit}>
+                                            <TextLink onPress={()=>{dispatch(SetAuthAction.setsignin(0))}}>
                                                 <TextLinkContent>Đăng Nhập</TextLinkContent>
                                             </TextLink>
                                         </ExtraView>

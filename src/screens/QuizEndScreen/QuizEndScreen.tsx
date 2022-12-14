@@ -14,6 +14,7 @@ import { RATE_PAYLOAD } from '../../../assets/data/subject'
 import { selectStudy } from '../../slice/setStudy'
 import axios from 'axios'
 import { selectUserName, SetUserAction } from '../../slice/setUser'
+const ngrok = 'https://5351-2001-ee0-481f-3b0-880c-fc56-1e9c-a0f9.ap.ngrok.io'
 
 const QuizEndScreen = ({ route, navigation }: RootStackScreenProps<"QuizEndScreen">) => {
   const { nofQuestions, nofCorrectAnswer, idCourse } = route.params;
@@ -21,7 +22,7 @@ const QuizEndScreen = ({ route, navigation }: RootStackScreenProps<"QuizEndScree
   const currentUser = useAppSelector(selectUserName)
   const course = useAppSelector(selectStudy)
   const currentCourse = course.course.find((c) => c.courseId === idCourse)
-  console.log("currentCourse", currentCourse)
+  // console.log("currentCourse", currentCourse)
   const dispatch = useAppDispatch()
   // const isHappy = percentage > 40
   // const happyText = `Bạn đúng được ${nofCorrectAnswer} câu , Duy trì phong độ nhé!😄`
@@ -50,9 +51,9 @@ const QuizEndScreen = ({ route, navigation }: RootStackScreenProps<"QuizEndScree
   }
   const SubmitHandler =  () => {
 
-    const urlUpdate = 'https://2248-2001-ee0-4818-c90-89bd-1cda-528b-8b79.ap.ngrok.io/updateRate'
-    const urlScore =  'https://2248-2001-ee0-4818-c90-89bd-1cda-528b-8b79.ap.ngrok.io/updateScore'
-    console.log('getin')
+    const urlUpdate = ngrok+'/updateRate'
+    const urlScore =  ngrok+'/updateScore'
+  
     const a = currentUser.score
     axios.post(urlScore,{
       score:(a+(nofCorrectAnswer * 20)),

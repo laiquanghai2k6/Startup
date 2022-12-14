@@ -13,19 +13,21 @@ import { selectStudy } from '../../slice/setStudy'
 let selectedQuestion
 let icon
 let idSubject
+
+const ngrok = 'https://5351-2001-ee0-481f-3b0-880c-fc56-1e9c-a0f9.ap.ngrok.io'
+
 const QuestionScreen = ({ route, navigation }: RootStackScreenProps<'QuestionScreen'>) => {
-  console.log('routes2:',route.params.id)
+ 
   const study = useAppSelector(selectStudy)
   const selectedCourse = study.course.find((course,index)=>course.courseId == route.params.id)
   const quiz = study.quiz.filter((quiz,i)=>quiz.courseId == route.params.id)
 
-  console.log("quiz",quiz)
   const Subject = useAppSelector(selectCourse)
  
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
   const [indexQuiz, setIndexQuiz] = useState(0)
   const [currentQuiz, setCurrentQuiz] = useState(quiz[0])
-  console.log("currentQuiz",currentQuiz)
+ 
   const [answeredCorrectly, setAnsweredCorrectly] = useState<
     boolean | undefined>(undefined);
   const [numberOfCorrectAnswers, setNumberOfCorrectAnswers] = useState(0);
@@ -49,9 +51,40 @@ const QuestionScreen = ({ route, navigation }: RootStackScreenProps<'QuestionScr
     if (!currentQuiz) {
       return;
     }
+    let isCorrect
+    // const isCorrect = selectedAnswers.includes(currentQuiz.correctA)
+    // if(selectedAnswers[0] == currentQuiz.a1){
 
-    const isCorrect = selectedAnswers.includes(currentQuiz.correctA)
-    console.log("isCorrect: ", isCorrect)
+    // }
+    console.log("selectedAnswers[0]",selectedAnswers[0])
+    if(currentQuiz.correctA == "1"){
+      if(selectedAnswers[0] == currentQuiz.a1){
+        isCorrect = true
+      }else{
+        isCorrect = false
+      }
+    }else if(currentQuiz.correctA == "2"){
+      if(selectedAnswers[0] == currentQuiz.a2){
+        isCorrect = true
+      }else{
+        isCorrect = false
+      }
+    }
+    else if(currentQuiz.correctA == "3"){
+      if(selectedAnswers[0] == currentQuiz.a3){
+        isCorrect = true
+      }else{
+        isCorrect = false
+      }
+    }else{
+      if(selectedAnswers[0] == currentQuiz.a4){
+        isCorrect = true
+      }else{
+        isCorrect = false
+      }
+    }
+    console.log("isCorrect",isCorrect)
+  
     setAnsweredCorrectly(isCorrect);
     if (isCorrect) {
       setNumberOfCorrectAnswers((n) => n + 1);
@@ -69,7 +102,7 @@ const QuestionScreen = ({ route, navigation }: RootStackScreenProps<'QuestionScr
   console.log(indexQuiz + '-' + quiz.length)
   useEffect(() => {
     if (indexQuiz === quiz.length && indexQuiz > 0) {
-      console.log("idCOURSE:",route.params.id)
+
       navigation.navigate("QuizEndScreen", {
         idCourse: route.params.id,
         nofQuestions: quiz.length,
@@ -80,7 +113,7 @@ const QuestionScreen = ({ route, navigation }: RootStackScreenProps<'QuestionScr
 
 
   }, [indexQuiz])
-  
+    console.log(currentQuiz)
   return (
    <>
 
@@ -103,13 +136,13 @@ const QuestionScreen = ({ route, navigation }: RootStackScreenProps<'QuestionScr
       </View>
 
       <ProgressBar progress={(indexQuiz + 1) / quiz.length} />
-      <Text style={{ color: 'white', marginVertical: 20, marginLeft: 10, fontSize: 15, fontWeight: '800' }}>{currentQuiz?.text}</Text>
+      <Text style={{ color: 'white', marginVertical: 20, marginLeft: 10, fontSize: 15, fontWeight: '800' }}>{currentQuiz?.quizText}</Text>
       <Image
         style={{
           width: '100%',
           height: 300,
         }}
-        source={{ uri: currentQuiz?.quizImage }}
+        source={{ uri: ngrok+'/i/'+currentQuiz?.quizImage }}
         resizeMode='contain'
 
       />
@@ -128,7 +161,7 @@ const QuestionScreen = ({ route, navigation }: RootStackScreenProps<'QuestionScr
           ))}
         </View>
       )}
-      <CustomBotton text="Submit"
+      <CustomBotton text="Đồng Ý"
         disabled={isButtonDisabled}
         onPress={onSubmit} />
 
@@ -138,7 +171,9 @@ const QuestionScreen = ({ route, navigation }: RootStackScreenProps<'QuestionScr
         entering={SlideInDown.duration(500)}
         exiting={SlideInDown.duration(1)}
         style={[styles.answerBox, styles.correctAnswerBox]}>
-        <Text style={styles.correctTitle}>Correct</Text>
+        <Text style={styles.correctTitle}>Đúng rồi!</Text>
+
+
         <View style={{ marginLeft: 'auto', bottom: 30, flexDirection: 'row', alignItems: 'center' }}>
           <Image
             source={{ uri: 'https://img.icons8.com/external-febrian-hidayat-flat-febrian-hidayat/344/external-trophy-ui-essential-febrian-hidayat-flat-febrian-hidayat.png' }}
@@ -146,7 +181,7 @@ const QuestionScreen = ({ route, navigation }: RootStackScreenProps<'QuestionScr
           />
           <Text style={{ fontWeight: '800' }} >+20</Text>
         </View>
-        <CustomBotton text="Continue"
+        <CustomBotton text="Tiếp Tục"
           onPress={onContinue}
         />
       </Animated.View>}
@@ -155,7 +190,9 @@ const QuestionScreen = ({ route, navigation }: RootStackScreenProps<'QuestionScr
       entering={SlideInDown.duration(500)}
       exiting={SlideInDown.duration(1)}
       style={[styles.answerBox, styles.wrongAnswerBox]}>
-      <Text style={styles.wrongTitle}>Wrong</Text>
+      <Text style={styles.wrongTitle}>Sai rồi!</Text>
+      <Text style={{paddingRight:50}}>Đáp án thứ {currentQuiz.correctA} mới đúng!</Text>
+
       <View style={{ marginLeft: 'auto', bottom: 30, flexDirection: 'row', alignItems: 'center' }}>
         <Image
           source={{ uri: 'https://img.icons8.com/external-febrian-hidayat-flat-febrian-hidayat/344/external-trophy-ui-essential-febrian-hidayat-flat-febrian-hidayat.png' }}
@@ -163,7 +200,7 @@ const QuestionScreen = ({ route, navigation }: RootStackScreenProps<'QuestionScr
         />
         <Text style={{ fontWeight: '800' }} >+0</Text>
       </View>
-      <CustomBotton text="Continue"
+      <CustomBotton text="Tiếp Tục"
         onPress={onContinue}
       />
     </Animated.View>

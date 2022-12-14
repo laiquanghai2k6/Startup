@@ -31,7 +31,8 @@ const initialState = {
     live:'',
     school:'',
     subject:'',
-    allUser:[]
+    allUser:[],
+    sortUser:[]
 }
 
 
@@ -63,6 +64,12 @@ export const SetUser = createSlice({
         setalluser: (state, action: PayloadAction<Array<Object>>) => {
             
             state.allUser = action.payload
+         return state
+      
+        },
+        setsortuser:(state, action: PayloadAction<Array<Object>>) => {
+            
+            state.sortUser = action.payload
          return state
       
         },

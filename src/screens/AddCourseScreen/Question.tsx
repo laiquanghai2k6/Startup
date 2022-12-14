@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { QuestionIF } from './AddCourseScreen'
 import { InputQuestion } from './QuestionGroup'
 import * as ImagePicker from 'expo-image-picker'
+import {Picker} from '@react-native-picker/picker';
 interface Question {
   numberquestion: number,
   isSubmit: boolean,
@@ -16,6 +17,7 @@ const PLACEHOLDER_IMG =
 const Question = (props: Question) => {
   const { numberquestion, isSubmit, handleUpdateQuestion } = props
   const [image,setImage] = useState("")
+  const [selectedValue,setSelectedValue] = useState("")
   let base64 ="data:image/jpeg;base64,"
   const handleInput = (val: string, type: InputQuestion) => {
     handleUpdateQuestion(val, type, numberquestion)
@@ -24,22 +26,23 @@ const Question = (props: Question) => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [6, 4],
+      aspect: [1, 1],
       quality: 1,
-      base64: true
+      // base64: true
     })
     if (!result.cancelled) {
       console.log(result.uri)
       setImage(result.uri)
-      base64 +=result.base64
+      
+      // if(result.uri != ""){
+        handleInput(result.uri, InputQuestion.IMAGE)
+        // }else{
+        // handleInput("", InputQuestion.IMAGE)
     }
-    if(base64 != "data:image/jpeg;base64,"){
-    handleInput(base64, InputQuestion.IMAGE)
-    }else{
-    handleInput("", InputQuestion.IMAGE)
+    
 
     }
-  }
+  
   // console.log("IMAGE:",image)
   return (
     <View>
@@ -110,13 +113,27 @@ const Question = (props: Question) => {
         />
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10, marginHorizontal: 10 }}>
-        <Text style={{ color: 'white' }}>Đáp án thứ đúng: </Text>
+        <Text style={{ color: 'white' }}>Đáp án đúng(bấm vào): </Text>
 
-        <TextInput style={{ borderColor: 'white', borderWidth: 2, width: 230, marginLeft: 'auto', color: 'white' }}
+        {/* <TextInput style={{ borderColor: 'white', borderWidth: 2, width: 230, color: 'white' }}
           onChangeText={e => { handleInput(e, InputQuestion.RESULT) }}
 
 
-        />
+        /> */}
+         <Picker
+        selectedValue={selectedValue}
+        style={{ height: 30, width: 160,backgroundColor:'white'}}
+        onValueChange={(itemValue, itemIndex) => {
+          setSelectedValue(itemValue)
+          handleInput(itemValue, InputQuestion.RESULT)
+          
+          }}>
+        {/* <Picker.Item label="Chọn đáp án " value="1" /> */}
+        <Picker.Item label="Đáp án thứ 1" value="1" />
+        <Picker.Item label="Đáp án thứ 2" value="2" />
+        <Picker.Item label="Đáp án thứ 3" value="3" />
+        <Picker.Item label="Đáp án thứ 4" value="4" />
+      </Picker>
       </View>
 
 

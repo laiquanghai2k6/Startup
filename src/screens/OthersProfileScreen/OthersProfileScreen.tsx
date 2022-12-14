@@ -7,10 +7,13 @@ import CustomButton from '../../components/CustomButton'
 import { useAppSelector } from '../../redux/hook'
 import { selectUserName } from '../../slice/setUser'
 
+const ngrok = 'https://ee05-2001-ee0-481f-3b0-98a-a7bc-36c8-6dd.ap.ngrok.io'
+
+
 const OthersProfileScreen = ({ route, navigation }: RootStackScreenProps<'OthersProfileScreen'> )=> {
     const user = useAppSelector(selectUserName)
     const currentUser = user.allUser.find(user=> user.id == route.params.name)
-    console.log("cr",currentUser)
+    // console.log("cr",currentUser)
 
     const ChatHandler = () =>{
       navigation.navigate("ChannelScreen",{id:route.params.name})
@@ -31,7 +34,7 @@ const OthersProfileScreen = ({ route, navigation }: RootStackScreenProps<'Others
         </TouchableOpacity>
       <Text style={{color:'white',fontSize:20,fontWeight:'900',marginLeft:180,right:100}}>Trang cá nhân</Text>
       </View>
-      <Image  source={{uri:currentUser?.image}} style={styles.avatar} />
+      <Image  source={{uri:ngrok+'/i/'+currentUser?.image}} style={styles.avatar} />
       
       <Text style={styles.name}>{currentUser?.tai_khoan}</Text>
       <View style={{flexDirection:'row'}}>

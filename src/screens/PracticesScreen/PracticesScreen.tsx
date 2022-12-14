@@ -52,7 +52,7 @@ const PracticesScreen = ({ route, navigation }: RootStackScreenProps<'PracticesS
     
     useApplyHeaderWorkaround(navigation.setOptions)
     const study = useAppSelector(selectStudy)
-    console.log("STUDY:",study.course)
+    // console.log("STUDY:",study.course)
     const selectedSubjects = study.subject.find((subject, index) => subject.subjectId == route.params.id)
     const courses = study.course.filter((course, index) => course.subjectId == route.params.id)
     useLayoutEffect(() => {

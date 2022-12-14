@@ -13,6 +13,7 @@ import {
     Image,
     TouchableOpacity,
     Modal,
+    ScrollView,
 } from "react-native";
 import { useAppSelector } from '../../redux/hook';
 import { selectCourse } from '../../slice/AddCourseSlice';
@@ -89,7 +90,7 @@ const PracticesOfflineScreen = ({ route, navigation }: RootStackScreenProps<'Pra
                 source={{ uri: 'https://raw.githubusercontent.com/notJust-dev/iOSLockScreen/main/assets/images/bg.jpeg' }}
                 style={{ width: '100%', height: '100%' }}
             >
-                <View style={{ marginTop: 10 }}>
+                <ScrollView style={{ marginTop: 10 }}>
                     {selectedSubject?.courses.map((course, index) => {
                         const gradient = useMemo(
 
@@ -150,7 +151,7 @@ const PracticesOfflineScreen = ({ route, navigation }: RootStackScreenProps<'Pra
                         )
 
                     })}
-                </View>
+                </ScrollView>
 
             </ImageBackground>
             

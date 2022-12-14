@@ -33,6 +33,7 @@ export enum InputQuestion {
   RESULT,
   IMAGE
 }
+const ngrok = 'https://5351-2001-ee0-481f-3b0-880c-fc56-1e9c-a0f9.ap.ngrok.io'
 
 const QuestionGroup = (props: QuestionGroupProps) => {
   const { numberQuestions,
@@ -105,9 +106,10 @@ const QuestionGroup = (props: QuestionGroupProps) => {
         })
       }
       if(b){
-        let a:QUIZ[] = []
-        var urlCreateQuiz = 'https://2248-2001-ee0-4818-c90-89bd-1cda-528b-8b79.ap.ngrok.io/createQuiz'
-        var urlCreateCourse = 'https://2248-2001-ee0-4818-c90-89bd-1cda-528b-8b79.ap.ngrok.io/createCourse'
+        
+        var urlCreateQuiz = ngrok+'/createQuiz'
+        var urlCreateCourse = ngrok+'/createCourse'
+        var urlImage = ngrok+'/upload'
         const createCourse = async ()=>{
           await axios.post(urlCreateCourse,{
             courseName:nameCourse,
@@ -117,48 +119,56 @@ const QuestionGroup = (props: QuestionGroupProps) => {
           })
         }
         createCourse()
-     
-
-        // const dispatch:COURSE = {
-          
-        //   classes:classes,
-        //   type : typeScreen,
-        //   name: nameCourse,
-        //   created:'clonezz',
-        //   quiz: a,
-        //   rate:{
-        //     totalLearned:0,
-        //     totalRateScore:0
-        //   },
-        //   password:""
-   
-        // } 
-    
-
-        questions.map(async (question,index)=>{
-            // const bs:QUIZ = {
-            //   text:question.text,
-            //   quizImage: question.image,
-            //   answer:[question.question1,question.question2,question.question3,question.question4,],
-            //   CorrectAnswer:question.result
-            // }
-            // a.push(bs)
+        questions.map(async (question,index)=>{ 
+          console.log("question.image.slice(60)",question.image.slice(60))   
+          console.log("question.text",question.text)
             await axios.post(urlCreateQuiz,{
-              quizImage: question.image,
-              quizText:question.text,
+              quizImage: question.image.slice(60),
               a1:question.question1,
               a2:question.question2,
               a3:question.question3,
               a4:question.question4,
               correctA:question.result,
+              quizText:question.text.toString(),
+
               courseId:max+1,
             }).then((r)=>console.log(r))
             .catch((e)=>console.log(e))
         })
+
+        questions.map(async (question,index)=>{    
+        const formData = new FormData()
+        const Name = question.image.slice(60)
+        console.log("question.image",question.image)
+          formData.append("testImage", {
+            uri:question.image,
+            name:Name,
+            fileName:'image',
+            type:'image/png'
+          
+        })
+          await axios({
+            method:'post',
+            url:urlImage,
+            data:formData,
+            headers: {
+        
+              'Content-Type' : 'multipart/form-data',
+              'Authorization':'Basic YnJva2VyOmJyb2tlcl8xMjM='
+              
+          }
+          }).then((r)=>console.log(r))
+          .catch((e)=>console.log(e))
+      })
+
+
         DISPATCH(SetStudyAction.setTest(1))
+        // questions.map((question,index)=>{
+        //   console.log(question.result)
+        // })
 
       
-        // DISPATCH(addCourseAction.addCourse(dispatch))
+      
         navigation.navigate('Root')
       
 

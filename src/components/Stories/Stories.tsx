@@ -7,6 +7,8 @@ import axios from 'axios'
 import { useAppSelector } from '../../redux/hook'
 import { selectUserName } from '../../slice/setUser'
 import useApplyHeaderWorkaround from '../../hooks/useApplyHeaderWorkaround'
+const ngrok = 'https://5351-2001-ee0-481f-3b0-880c-fc56-1e9c-a0f9.ap.ngrok.io'
+
 
 const Stories = () => {
     const navigation = useNavigation();
@@ -31,7 +33,7 @@ const Stories = () => {
              style={styles.storyContainer}
              >
                    <Image 
-                source={{uri:story.image}}
+                source={{uri:story.image == "iddefault.webp" ? "https://i0.wp.com/www.repol.copl.ulaval.ca/wp-content/uploads/2019/01/default-user-icon.jpg" : ngrok+'/i/'+story.image}}
                 style={styles.story}
                 />
                 <Text style={styles.storyName}>

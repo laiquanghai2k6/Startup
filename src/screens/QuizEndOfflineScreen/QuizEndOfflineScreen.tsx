@@ -5,13 +5,17 @@ import star from '../../../assets/images/star.png'
 import christmas from '../../../assets/images/christmas-star.png'
 import CustomButton from '../../components/CustomButton'
 import Colors from '../../constants/Colors'
-
+import { useAppDispatch, useAppSelector } from '../../redux/hook'
+import { selectUserName, SetUserAction } from '../../slice/setUser'
+import axios from 'axios'
+const ngrok = 'https://5351-2001-ee0-481f-3b0-880c-fc56-1e9c-a0f9.ap.ngrok.io'
 
 const QuizEndOfflineScreen = ({ route, navigation }: RootStackScreenProps<"QuizEndOfflineScreen">) => {
   const { nofQuestions, nofCorrectAnswer} = route.params;
   const percentage = (nofCorrectAnswer / nofQuestions) * 100;
+  const dispatch = useAppDispatch()
     console.log("GG")
-  
+    const currentUser = useAppSelector(selectUserName)
  
 const [positionDanhGia,setPositionDanhGia] = useState(0)
 
@@ -31,7 +35,18 @@ const [positionDanhGia,setPositionDanhGia] = useState(0)
     setPositionDanhGia(5);
   }
   const SubmitHandler = () =>{
- 
+    const urlScore =  ngrok+'/updateScore'
+  
+    const a = currentUser.score
+    axios.post(urlScore,{
+      score:(a+(nofCorrectAnswer * 20)),
+      id:currentUser.id,
+    }).then((res) => {
+      console.log('updated like')
+
+    }).catch(e => console.log(e))
+    dispatch(SetUserAction.setscore(a+(nofCorrectAnswer * 20)))
+    
    navigation.navigate("Root")
   }
   return (
