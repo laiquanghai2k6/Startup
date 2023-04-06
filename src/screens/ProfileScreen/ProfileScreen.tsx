@@ -18,7 +18,7 @@ import { selectUserName } from '../../slice/setUser'
 import axios from 'axios'
 import * as ImagePicker from 'expo-image-picker'
 
-const ngrok = 'https://5351-2001-ee0-481f-3b0-880c-fc56-1e9c-a0f9.ap.ngrok.io'
+const ngrok = 'https://a3f0-2001-ee0-481c-e00-54cd-1af7-4f93-9cf8.ap.ngrok.io'
 const ProfileScreen = () => {
   const user = useAppSelector(selectUserName)
 

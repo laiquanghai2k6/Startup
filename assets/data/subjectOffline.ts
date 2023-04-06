@@ -35,21 +35,21 @@ export const SubjectOffline:SUBJECTOFFLINE[] = [
             quiz:[
                 {
                     quizImage:
-                  'https://scontent-hkt1-1.xx.fbcdn.net/v/t1.15752-9/312562750_1070484970289324_7522105326220158031_n.png?_nc_cat=110&ccb=1-7&_nc_sid=ae9488&_nc_ohc=WE48oEjeQegAX-8r-5s&_nc_ht=scontent-hkt1-1.xx&oh=03_AdROl5h39dM2QJVJdkxH5CvCekQa3aER4TLaHVaoiR60rQ&oe=6399C2AA',
+                  'https://i.ibb.co/tzktR1t/313360433-1310866142999990-8360666072722146459-n.png',
                     answer:['y = sinx','y = cosx','y = tan x','y = cotx'],
                     CorrectAnswer:'y = cosx',
                     solution:'Sử dụng định nghĩa để kiểm tra tính chẵn, lẻ. Ta có hàm số chẵn là y = cosx'
                 },
                 {
                     quizImage:
-                    'https://scontent-hkt1-1.xx.fbcdn.net/v/t1.15752-9/313360433_1310866142999990_8360666072722146459_n.png?_nc_cat=110&ccb=1-7&_nc_sid=ae9488&_nc_ohc=wIN9qzUhc6QAX9_sB9b&_nc_ht=scontent-hkt1-1.xx&oh=03_AdRFR_ZuX8SUMSDJXu7gXWho6kNwgRmoxTryGbS-ABASRQ&oe=6399BF95',
+                    'https://i.ibb.co/QcG3CcM/312562750-1070484970289324-7522105326220158031-n.png',
                     answer:['y = cosx + (sinx)²','y = sin x + cosx','y = -cosx ','y = sinx.cos3x'],
                     CorrectAnswer:'y = sinx.cos3x',
                     solution:'Ta có sin(-x).cos(-3x) = -sinx.cos3x'
                 },
                 {
                     quizImage:
-                    'https://scontent.fhan3-5.fna.fbcdn.net/v/t1.15752-9/313909241_1534867176943057_2008093130022931376_n.png?_nc_cat=109&ccb=1-7&_nc_sid=ae9488&_nc_ohc=E-JQbgNy8r8AX_ZJDVz&_nc_ht=scontent.fhan3-5.fna&oh=03_AdRZin1kUW5isLbkY2-oB1FVrdmKkXxifEF4aXJ_z2PHYw&oe=6399B1B5',
+                    'https://i.ibb.co/kGbkd5c/313909241-1534867176943057-2008093130022931376-n.png',
                     answer:['y=cot4x','y=(sinx + 1)/cosx','cot²x','y=|cotx|'],
                     CorrectAnswer:'y=cot4x',
                    
@@ -58,7 +58,7 @@ export const SubjectOffline:SUBJECTOFFLINE[] = [
                 },
                 {
                     quizImage:
-                    'https://scontent-hkt1-2.xx.fbcdn.net/v/t1.15752-9/313851303_3449436378712376_3027714609028886001_n.png?_nc_cat=107&ccb=1-7&_nc_sid=ae9488&_nc_ohc=RBPOqwoT--kAX-Wq6nQ&_nc_ht=scontent-hkt1-2.xx&oh=03_AdSIqCn8LcjHIsnkCBBbeaUVYWSyCt91EiMFX9EpEOg8bA&oe=6399B3DD',
+                    'https://i.ibb.co/PhyQtnN/313851303-3449436378712376-3027714609028886001-n.png',
                     answer:['f(x) là hàm số chẵn, g(x) là hàm số lẻ.',
                     'f(x) là hàm số lẻ, g(x) là hàm số chẵn.',
                     'f(x) là hàm số chẵn, g(x) là hàm số chẵn.',
@@ -69,7 +69,7 @@ export const SubjectOffline:SUBJECTOFFLINE[] = [
                 },
                 {
                     quizImage:
-                    'https://scontent-hkt1-2.xx.fbcdn.net/v/t1.15752-9/313851303_3449436378712376_3027714609028886001_n.png?_nc_cat=107&ccb=1-7&_nc_sid=ae9488&_nc_ohc=RBPOqwoT--kAX-Wq6nQ&_nc_ht=scontent-hkt1-2.xx&oh=03_AdSIqCn8LcjHIsnkCBBbeaUVYWSyCt91EiMFX9EpEOg8bA&oe=6399B3DD',
+                    'https://i.ibb.co/PhyQtnN/313851303-3449436378712376-3027714609028886001-n.png',
                     answer:['f(x) là hàm số chẵn, g(x) là hàm số lẻ.',
                     'f(x) là hàm số lẻ, g(x) là hàm số chẵn.',
                     'f(x) là hàm số chẵn, g(x) là hàm số chẵn.',
@@ -480,21 +480,21 @@ solution:`Do số học sinh nữ nhiều hơn số học sinh nam là 1 bạn n
             quiz:[
                 {
                     quizImage:
-                  'https://scontent-hkt1-1.xx.fbcdn.net/v/t1.15752-9/312562750_1070484970289324_7522105326220158031_n.png?_nc_cat=110&ccb=1-7&_nc_sid=ae9488&_nc_ohc=WE48oEjeQegAX-8r-5s&_nc_ht=scontent-hkt1-1.xx&oh=03_AdROl5h39dM2QJVJdkxH5CvCekQa3aER4TLaHVaoiR60rQ&oe=6399C2AA',
+                  'https://i.ibb.co/tzktR1t/313360433-1310866142999990-8360666072722146459-n.png',
                     answer:['y = sinx','y = cosx','y = tan x','y = cotx'],
                     CorrectAnswer:'y = cosx',
                     solution:'Sử dụng định nghĩa để kiểm tra tính chẵn, lẻ. Ta có hàm số chẵn là y = cosx'
                 },
                 {
                     quizImage:
-                    'https://scontent-hkt1-1.xx.fbcdn.net/v/t1.15752-9/313360433_1310866142999990_8360666072722146459_n.png?_nc_cat=110&ccb=1-7&_nc_sid=ae9488&_nc_ohc=wIN9qzUhc6QAX9_sB9b&_nc_ht=scontent-hkt1-1.xx&oh=03_AdRFR_ZuX8SUMSDJXu7gXWho6kNwgRmoxTryGbS-ABASRQ&oe=6399BF95',
+                    'https://i.ibb.co/QcG3CcM/312562750-1070484970289324-7522105326220158031-n.png',
                     answer:['y = cosx + (sinx)²','y = sin x + cosx','y = -cosx ','y = sinx.cos3x'],
                     CorrectAnswer:'y = sinx.cos3x',
                     solution:'Ta có sin(-x).cos(-3x) = -sinx.cos3x'
                 },
                 {
                     quizImage:
-                    'https://scontent.fhan3-5.fna.fbcdn.net/v/t1.15752-9/313909241_1534867176943057_2008093130022931376_n.png?_nc_cat=109&ccb=1-7&_nc_sid=ae9488&_nc_ohc=E-JQbgNy8r8AX_ZJDVz&_nc_ht=scontent.fhan3-5.fna&oh=03_AdRZin1kUW5isLbkY2-oB1FVrdmKkXxifEF4aXJ_z2PHYw&oe=6399B1B5',
+                    'https://i.ibb.co/kGbkd5c/313909241-1534867176943057-2008093130022931376-n.png',
                     answer:['y=cot4x','y=(sinx + 1)/cosx','cot²x','y=|cotx|'],
                     CorrectAnswer:'y=cot4x',
                    
@@ -503,7 +503,7 @@ solution:`Do số học sinh nữ nhiều hơn số học sinh nam là 1 bạn n
                 },
                 {
                     quizImage:
-                    'https://scontent-hkt1-2.xx.fbcdn.net/v/t1.15752-9/313851303_3449436378712376_3027714609028886001_n.png?_nc_cat=107&ccb=1-7&_nc_sid=ae9488&_nc_ohc=RBPOqwoT--kAX-Wq6nQ&_nc_ht=scontent-hkt1-2.xx&oh=03_AdSIqCn8LcjHIsnkCBBbeaUVYWSyCt91EiMFX9EpEOg8bA&oe=6399B3DD',
+                    'https://i.ibb.co/PhyQtnN/313851303-3449436378712376-3027714609028886001-n.png',
                     answer:['f(x) là hàm số chẵn, g(x) là hàm số lẻ.',
                     'f(x) là hàm số lẻ, g(x) là hàm số chẵn.',
                     'f(x) là hàm số chẵn, g(x) là hàm số chẵn.',

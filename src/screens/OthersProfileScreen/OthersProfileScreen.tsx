@@ -7,7 +7,7 @@ import CustomButton from '../../components/CustomButton'
 import { useAppSelector } from '../../redux/hook'
 import { selectUserName } from '../../slice/setUser'
 
-const ngrok = 'https://ee05-2001-ee0-481f-3b0-98a-a7bc-36c8-6dd.ap.ngrok.io'
+const ngrok = 'https://a3f0-2001-ee0-481c-e00-54cd-1af7-4f93-9cf8.ap.ngrok.io'
 
 
 const OthersProfileScreen = ({ route, navigation }: RootStackScreenProps<'OthersProfileScreen'> )=> {
